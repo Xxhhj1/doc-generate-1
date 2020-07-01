@@ -1,14 +1,16 @@
 import random,json
+import definitions
 from flask import Flask, request
 from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
 
 app = Flask(__name__)
-data_dir = './data/jabref.v1.dc'
+data_dir = definitions.ROOT_DIR + "/data/jabref.v1.dc"
 
 @app.route('/')
 def hello():
     return 'success'
 
+# search doc info according to method name
 @app.route('/get_doc', methods=["POST"])
 def get_doc():
     # post json data will be like this:
