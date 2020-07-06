@@ -38,7 +38,7 @@ class CharacteristicStructureExtractor(BaseStructureExtractor):
         :return:
         """
         block_set = {'table', 'jtable', 'on', 'out', 'go', 'home', 'still', 'sound', 'surface', 'no', 'color', 'midi',
-                     "set"}
+                     "set", "model"}
         if self.graph_data is None:
             print("load graph data error")
         counter = 0
@@ -57,8 +57,9 @@ class CharacteristicStructureExtractor(BaseStructureExtractor):
                     if class_word_list is None:
                         continue
                     for i in range(0, len(class_word_list)):
-                        if (WordUtil.couldBeADJ(class_word_list[i]) and class_word_list[i] not in block_set) or (
-                                class_word_list[i][-4:] == 'able' and class_word_list[i] not in block_set):
+                        if (WordUtil.couldBeADJ(class_word_list[i]) and class_word_list[
+                            i].lower() not in block_set) or (
+                                class_word_list[i][-4:] == 'able' and class_word_list[i].lower() not in block_set):
                             info_from_set = set()
                             info_from_set.add(
                                 (ALLKnowledgeFromType.FROM_Class_Name_Characteristic, api_name, api_name))
@@ -71,6 +72,8 @@ class CharacteristicStructureExtractor(BaseStructureExtractor):
                             }
                             # if class_word_list[i].lower().endswith(" table"):
                             #     continue
+                            if class_word_list[i].lower() == "table":
+                                continue
                             relation_data_tuple = StatementRecord(api_name,
                                                                   RelationNameConstant.has_Feature_Relation,
                                                                   class_word_list[i],
@@ -90,7 +93,7 @@ class CharacteristicStructureExtractor(BaseStructureExtractor):
         :return:
         """
         if qualified_name is not None:
-            return self.split_method_name_into_words(qualified_name.split('.')[-1])[-1]
+            return qualified_name.split('.')[-1]
         return None
 
     def get_qualified_name(self, node_dict):
@@ -125,8 +128,9 @@ class CharacteristicStructureExtractor(BaseStructureExtractor):
                         if interface_word_list is None:
                             continue
                         for interface_word in interface_word_list:
-                            if (WordUtil.couldBeADJ(interface_word) and interface_word not in block_set) or (
-                                    interface_word[-4:] == 'able' and interface_word not in block_set):
+                            interface_word = interface_word.lower()
+                            if (WordUtil.couldBeADJ(interface_word) and interface_word.lower() not in block_set) or (
+                                    interface_word[-4:] == 'able' and interface_word.lower() not in block_set):
                                 info_from_set = set()
                                 info_from_set.add(
                                     (ALLKnowledgeFromType.FROM_Class_Name_Characteristic, interface_name,
@@ -160,14 +164,17 @@ class CharacteristicStructureExtractor(BaseStructureExtractor):
     def after_run(self, **config):
         super().after_run(**config)
         print("after running component %r" % (self.type()))
+        counter = 0
         for i, api_id in enumerate(self.api_id_2_statement):
             statement_list = self.api_id_2_statement[api_id]
             if i % 1000 == 0:
                 print(i)
+            counter += len(statement_list)
             for statement in statement_list:
                 statement_node_id = self.create_statement_entity(statement)
                 self.add_relations(api_id, statement.r_name, statement_node_id)
         self.graph_data.save(self.graph_out_path)
+        print("counter" + str(counter))
 
     def set_save_path(self, p):
         self.graph_out_path = p
