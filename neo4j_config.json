@@ -1,0 +1,22 @@
+[
+  {
+    "server_name": "CodeWisdom",
+    "server_id": 1,
+    "host": "10.141.221.87",
+    "user": "neo4j",
+    "password": "123456",
+    "http_port": 1474,
+    "https_port": 1473,
+    "bolt_port": 1687
+  },
+  {
+    "server_name": "wiki",
+    "server_id": 2,
+    "host": "10.141.221.87",
+    "user": "neo4j",
+    "password": "123456",
+    "http_port": 11474,
+    "https_port": 11473,
+    "bolt_port": 11687
+  }
+]
