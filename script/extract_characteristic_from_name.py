@@ -1,6 +1,4 @@
-from pathlib import Path
 
-from sekg.graph.exporter.graph_data import GraphData
 from sekg.pipeline.base import KGBuildPipeline
 
 from project.module1.characteristic_structure_extractor import CharacteristicStructureExtractor
@@ -11,7 +9,6 @@ if __name__ == '__main__':
     pro_name = "jabref"
     graph_data_v1_path = PathUtil.graph_data(pro_name=pro_name, version="v1")
     pipeline.load_graph(graph_data_v1_path)
-    config_1 = {"graph_output_path": PathUtil.graph_data(pro_name=pro_name, version="v2")}
     component1 = CharacteristicStructureExtractor()
     component1.set_save_path(PathUtil.graph_data(pro_name=pro_name, version="v1.1"))
     pipeline.add_component("从名称和结构中抽取特征", component1)

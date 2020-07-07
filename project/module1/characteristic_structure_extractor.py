@@ -1,5 +1,4 @@
 from sekg.text.extractor.domain_entity.word_util import WordUtil
-
 from project.module1.base_structure_extractor import BaseStructureExtractor
 from project.module1.constant.constant import *
 from project.module1.data_model.statement_record import StatementRecord
@@ -8,9 +7,6 @@ from project.module1.data_model.statement_record import StatementRecord
 class CharacteristicStructureExtractor(BaseStructureExtractor):
     def __init__(self):
         super().__init__()
-        # 保存结果的地方
-        self.api_id_2_statement = dict()
-        self.graph_out_path = None
         self.extractor_name = "characteristic_structure"
 
     def split_method_name_into_words(self, method_name):
@@ -160,21 +156,4 @@ class CharacteristicStructureExtractor(BaseStructureExtractor):
     def run(self, **config):
         print("running component %r" % (self.type()))
         self.extract_from_characteristic_name()
-
-    def after_run(self, **config):
-        super().after_run(**config)
-        print("after running component %r" % (self.type()))
-        counter = 0
-        for i, api_id in enumerate(self.api_id_2_statement):
-            statement_list = self.api_id_2_statement[api_id]
-            if i % 1000 == 0:
-                print(i)
-            counter += len(statement_list)
-            for statement in statement_list:
-                statement_node_id = self.create_statement_entity(statement)
-                self.add_relations(api_id, statement.r_name, statement_node_id)
-        self.graph_data.save(self.graph_out_path)
-        print("counter" + str(counter))
-
-    def set_save_path(self, p):
-        self.graph_out_path = p
+   

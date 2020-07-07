@@ -13,7 +13,7 @@ from project.module1.data_model.statement_record import StatementRecord
 
 
 class BaseStructureExtractor(Component):
-    def __init__(self,):
+    def __init__(self, ):
         super().__init__()
         self.code_name_tool = CodeElementNameUtil()
         self.type_of_class = {
@@ -49,6 +49,9 @@ class BaseStructureExtractor(Component):
             RelationNameConstant.has_Feature_Relation,
             RelationNameConstant.has_Constraint_Relation,
         }
+        # 保存结果的地方
+        self.api_id_2_statement = dict()
+        self.graph_out_path = None
 
     def uncamelize_classname(self, classname):
         """
@@ -138,3 +141,21 @@ class BaseStructureExtractor(Component):
             self.graph_data.add_relation(start_id, relation_str, end_id)
         except Exception as e:
             print(e)
+
+    def after_run(self, **config):
+        super().after_run(**config)
+        print("after running component %r" % (self.type()))
+        counter = 0
+        for i, api_id in enumerate(self.api_id_2_statement):
+            statement_list = self.api_id_2_statement[api_id]
+            if i % 1000 == 0:
+                print(i)
+            counter += len(statement_list)
+            for statement in statement_list:
+                statement_node_id = self.create_statement_entity(statement)
+                self.add_relations(api_id, statement.r_name, statement_node_id)
+        self.graph_data.save(self.graph_out_path)
+        print("counter" + str(counter))
+
+    def set_save_path(self, p):
+        self.graph_out_path = p
