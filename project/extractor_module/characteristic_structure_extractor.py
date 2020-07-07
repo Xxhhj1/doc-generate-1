@@ -1,7 +1,7 @@
 from sekg.text.extractor.domain_entity.word_util import WordUtil
-from project.module1.base_structure_extractor import BaseStructureExtractor
-from project.module1.constant.constant import *
-from project.module1.data_model.statement_record import StatementRecord
+from project.extractor_module.base_structure_extractor import BaseStructureExtractor
+from project.extractor_module.constant.constant import *
+from project.extractor_module.data_model.statement_record import StatementRecord
 
 
 class CharacteristicStructureExtractor(BaseStructureExtractor):

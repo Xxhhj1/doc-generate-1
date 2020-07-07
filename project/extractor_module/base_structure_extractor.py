@@ -7,9 +7,9 @@ from sekg.util.code import CodeElementNameUtil
 from sekg.util.vocabulary_conversion.vocabulary_conversion import VocabularyConversion
 import re
 
-from project.module1.constant.constant import FunctionalityConstant, FeatureConstant, DomainConstant, \
+from project.extractor_module.constant.constant import FunctionalityConstant, FeatureConstant, DomainConstant, \
     RelationNameConstant
-from project.module1.data_model.statement_record import StatementRecord
+from project.extractor_module.data_model.statement_record import StatementRecord
 
 
 class BaseStructureExtractor(Component):

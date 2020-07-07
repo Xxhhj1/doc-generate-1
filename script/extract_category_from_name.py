@@ -1,7 +1,7 @@
 from sekg.pipeline.base import KGBuildPipeline
 
-from project.module1.category_structure_extractor import CategoryStructureExtractor
-from project.module1.func_name_extractor import FuncNameExtractor
+from project.extractor_module.category_structure_extractor import CategoryStructureExtractor
+from project.extractor_module.func_name_extractor import FuncNameExtractor
 from project.utils.path_util import PathUtil
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ from sekg.util.dependency_tree_util import DependencyTreeUtil
 import re
 import pickle
 
-from project.module1.data_model.statement_record import StatementRecord
+from project.extractor_module.data_model.statement_record import StatementRecord
 
 
 class Tool:

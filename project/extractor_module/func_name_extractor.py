@@ -1,7 +1,7 @@
 from sekg.constant.constant import CodeConstant
-from project.module1.base_structure_extractor import BaseStructureExtractor
-from project.module1.constant.constant import ALLKnowledgeFromType, RelationNameConstant, NPEntityType
-from project.module1.data_model.statement_record import StatementRecord
+from project.extractor_module.base_structure_extractor import BaseStructureExtractor
+from project.extractor_module.constant.constant import ALLKnowledgeFromType, RelationNameConstant, NPEntityType
+from project.extractor_module.data_model.statement_record import StatementRecord
 
 
 class FuncNameExtractor(BaseStructureExtractor):
