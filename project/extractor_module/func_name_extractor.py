@@ -136,4 +136,5 @@ class FuncNameExtractor(BaseStructureExtractor):
     def run(self, **config):
         print("running component %r" % (self.type()))
         self.extract_from_func_name()
+        self.save_json(self.json_save_path)
 

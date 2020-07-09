@@ -70,6 +70,8 @@ class CharacteristicStructureExtractor(BaseStructureExtractor):
                             #     continue
                             if class_word_list[i].lower() == "table":
                                 continue
+                            if len(class_word_list[i]) <= 3:
+                                continue
                             relation_data_tuple = StatementRecord(api_name,
                                                                   RelationNameConstant.has_Feature_Relation,
                                                                   class_word_list[i],
@@ -156,4 +158,4 @@ class CharacteristicStructureExtractor(BaseStructureExtractor):
     def run(self, **config):
         print("running component %r" % (self.type()))
         self.extract_from_characteristic_name()
-   
+        self.save_json(self.json_save_path)

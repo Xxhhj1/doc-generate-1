@@ -46,7 +46,6 @@ class CategoryStructureExtractor(BaseStructureExtractor):
             relations = self.graph_data.get_all_out_relations(node_id)
             for relation in relations:
                 try:
-                    print(relation[1])
                     if 'implements' not in relation[1] and 'extends' not in relation[1]:
                         continue
                     re1 = self.graph_data.get_node_info_dict(relation[0])
@@ -115,3 +114,4 @@ class CategoryStructureExtractor(BaseStructureExtractor):
     def run(self, **config):
         print("running component %r" % (self.type()))
         self.extract_from_category()
+        self.save_json(self.json_save_path)

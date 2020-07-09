@@ -37,7 +37,7 @@ class StatementRecord:
             "e_name": self.e_name,
             "s_type": self.s_type,
             "e_type": self.e_type,
-
+            "which_extractor": self.which_extractor,
             "info_from_set": list(self.get_info_from_set()),
         }
 

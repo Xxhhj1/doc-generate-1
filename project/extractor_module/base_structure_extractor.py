@@ -10,6 +10,7 @@ import re
 from project.extractor_module.constant.constant import FunctionalityConstant, FeatureConstant, DomainConstant, \
     RelationNameConstant
 from project.extractor_module.data_model.statement_record import StatementRecord
+from project.utils.json_tool import JsonTool
 
 
 class BaseStructureExtractor(Component):
@@ -52,6 +53,18 @@ class BaseStructureExtractor(Component):
         # 保存结果的地方
         self.api_id_2_statement = dict()
         self.graph_out_path = None
+        self.json_tool = JsonTool()
+        self.json_save_path = None
+
+    def set_json_save_path(self, json_save_path):
+        self.json_save_path = json_save_path
+
+    def save_json(self, path: str):
+        for api_id in self.api_id_2_statement:
+            statement_list = self.api_id_2_statement[api_id]
+            for statement in statement_list:
+                self.json_tool.add_statement(api_id, statement)
+        self.json_tool.save_json(path)
 
     def uncamelize_classname(self, classname):
         """
