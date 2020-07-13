@@ -141,6 +141,8 @@ class BaseStructureExtractor(Component):
             return DomainConstant
         if relation in self.characteristic:
             return FeatureConstant
+        else:
+            return DomainConstant
 
     def add_relations(self, start_id, relation_str, end_id):
         """
