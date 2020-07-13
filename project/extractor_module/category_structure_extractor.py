@@ -1,4 +1,7 @@
+from nltk import WordNetLemmatizer
 from sekg.constant.constant import CodeConstant
+from sekg.text.extractor.domain_entity.relation_detection import RelationDetector, RelationType
+from sekg.util.code import CodeElementNameUtil
 from sekg.util.vocabulary_conversion.vocabulary_conversion import VocabularyConversion
 
 import re
@@ -15,6 +18,9 @@ class CategoryStructureExtractor(BaseStructureExtractor):
         self.api_id_2_statement = dict()
         # 所有的category名称，用于补充上下位关系
         self.category_entity_set = set()
+        self.category_relation_tool = RelationDetector()
+        # self.lemmatizer = WordNetLemmatizer()
+        self.code_element_tool = CodeElementNameUtil()
 
     def extract_ontology_from_class_name(self):
         """
@@ -29,10 +35,45 @@ class CategoryStructureExtractor(BaseStructureExtractor):
                                  "api_type"] in self.type_of_class):
                     qualified_name = node_json['properties'][CodeConstant.QUALIFIED_NAME]
                     name = qualified_name.split('.')[-1]
-                    un_name = self.uncamelize_classname(name)
+                    # self.lemmatizer.lemmatize(name)
+                    un_name = self.code_element_tool.uncamelize(name)
+                    word_set = set(un_name.split(" "))
+                    word_set.add(un_name)
+                    relation_set = self.category_relation_tool.detect_relation_by_starfix(word_set)
                     ontology_set = self.extract_camle_name(qualified_name)
                     ontology_set.add(un_name)
                     self.category_entity_set.update(ontology_set)
+                    info_from_set = set()
+                    info_from_set.add((ALLKnowledgeFromType.FROM_Class_Name_Category, qualified_name,
+                                       qualified_name))
+
+                    for relation in relation_set:
+                        if un_name.lower() != relation[0].lower():
+                            continue
+                        if relation[1] == RelationType.IS_A:
+                            if not un_name.lower().endswith(relation[2].lower()):
+                                continue
+                        elif relation[1] == RelationType.PART_OF:
+                            if not un_name.lower().startswith(relation[2].lower()):
+                                continue
+                        extra_info = {
+                            "condition": "",
+                            "core": relation[2],
+                            "leading_verb": "",
+                            "compare_subject": '',
+                            "compare_object": '',
+                        }
+                        relation_data_tuple = StatementRecord(qualified_name,
+                                                              relation[1],
+                                                              relation[2],
+                                                              NPEntityType.CategoryType,
+                                                              NPEntityType.CategoryType,
+                                                              self.extractor_name, info_from_set, **extra_info
+                                                              )
+                        if node_id not in self.api_id_2_statement:
+                            self.api_id_2_statement[node_id] = set()
+                        self.api_id_2_statement[node_id].add(relation_data_tuple)
+
             except Exception as e:
                 print(e)
 
