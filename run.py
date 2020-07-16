@@ -1,5 +1,3 @@
-import random, json
-import definitions
 from flask import Flask, request, jsonify
 from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
 from sekg.graph.exporter.graph_data import GraphData, NodeInfo
