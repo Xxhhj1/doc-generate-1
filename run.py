@@ -5,13 +5,16 @@ from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
 from sekg.graph.exporter.graph_data import GraphData, NodeInfo
 
 from project.knowledge_service import KnowledgeService
+from project.utils.path_util import PathUtil
 
 app = Flask(__name__)
-data_dir = definitions.ROOT_DIR + "/data/jabref.v1.dc"
-graph_dir = definitions.ROOT_DIR + "/data/jabref.v1.graph"
-graph_data: GraphData = GraphData.load(graph_dir)
+pro_name = "jabref"
+data_dir = PathUtil.doc(pro_name=pro_name, version="v1")
+graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1")
+graph_data: GraphData = GraphData.load(graph_data_path)
 doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 knowledge_service = KnowledgeService()
+
 
 @app.route('/')
 def hello():
@@ -27,11 +30,11 @@ def get_doc():
     if name.strip() == "":
         print('do not receive method name')
     else:
-        node: NodeInfo = graph_data.find_one_node_by_property(property_name='qualified_name', property_value=name)
+        node = graph_data.find_one_node_by_property(property_name='qualified_name', property_value=name)
         if node is None:
             print('can not find method which name is ' + name)
         else:
-            api_id = node.node_id
+            api_id = node["id"]
             print('success to find, api_id is %d' % api_id)
             doc: MultiFieldDocument = doc_collection.get_by_id(api_id)
             return_data['return_type'] = 'true'
