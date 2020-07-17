@@ -1,5 +1,5 @@
 from sekg.text.extractor.domain_entity.word_util import WordUtil
-from project.extractor_module.base_structure_extractor import BaseStructureExtractor
+from project.extractor_module.structure_extractor.base_structure_extractor import BaseStructureExtractor
 from project.extractor_module.constant.constant import *
 from project.extractor_module.data_model.statement_record import StatementRecord
 

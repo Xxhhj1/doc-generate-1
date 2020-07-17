@@ -1,4 +1,3 @@
-from nltk import WordNetLemmatizer
 from sekg.constant.constant import CodeConstant
 from sekg.text.extractor.domain_entity.relation_detection import RelationDetector, RelationType
 from sekg.util.code import CodeElementNameUtil
@@ -6,7 +5,7 @@ from sekg.util.vocabulary_conversion.vocabulary_conversion import VocabularyConv
 
 import re
 
-from project.extractor_module.base_structure_extractor import BaseStructureExtractor
+from project.extractor_module.structure_extractor.base_structure_extractor import BaseStructureExtractor
 from project.extractor_module.constant.constant import RelationNameConstant, NPEntityType, ALLKnowledgeFromType
 from project.extractor_module.data_model.statement_record import StatementRecord
 

@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
-from sekg.graph.exporter.graph_data import GraphData, NodeInfo
+from sekg.graph.exporter.graph_data import GraphData
 
 from project.knowledge_service import KnowledgeService
 from project.utils.path_util import PathUtil

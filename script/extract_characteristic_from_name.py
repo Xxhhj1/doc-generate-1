@@ -3,7 +3,7 @@ from pathlib import Path
 from sekg.pipeline.base import KGBuildPipeline
 
 from definitions import OUTPUT_DIR
-from project.extractor_module.characteristic_structure_extractor import CharacteristicStructureExtractor
+from project.extractor_module.structure_extractor.characteristic_structure_extractor import CharacteristicStructureExtractor
 from project.utils.path_util import PathUtil
 
 if __name__ == '__main__':

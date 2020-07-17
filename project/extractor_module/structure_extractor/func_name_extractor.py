@@ -1,5 +1,5 @@
 from sekg.constant.constant import CodeConstant
-from project.extractor_module.base_structure_extractor import BaseStructureExtractor
+from project.extractor_module.structure_extractor.base_structure_extractor import BaseStructureExtractor
 from project.extractor_module.constant.constant import ALLKnowledgeFromType, RelationNameConstant, NPEntityType
 from project.extractor_module.data_model.statement_record import StatementRecord
 
