@@ -39,6 +39,20 @@ class KnowledgeService:
             CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
         return self.parse_res_list(res_list)
 
+    def get_api_father_class(self, api_id):
+        # API 的父类是什么
+        res_list = []
+        res_list.extend(self.api_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
+            CodeEntityRelationCategory.RELATION_CATEGORY_EXTENDS]))
+        return self.parse_res_list(res_list)
+
+    def get_api_implement_class(self, api_id):
+        # API implements了哪些
+        res_list = []
+        res_list.extend(self.api_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
+            CodeEntityRelationCategory.RELATION_CATEGORY_IMPLEMENTS]))
+        return self.parse_res_list(res_list)
+
     def parse_res_list(self, res_list):
         parse_res = []
         for relation_type, node in res_list:
@@ -116,10 +130,19 @@ class KnowledgeService:
         api_id = self.get_api_id_by_name(api_name)
         return self.get_api_methods(api_id)
 
+    def api_father_class(self, api_name):
+        if api_name.find("(") > 0:
+            return []
+        api_id = self.get_api_id_by_name(api_name)
+        return self.get_api_father_class(api_id)
 
 if __name__ == '__main__':
     knowledge_service = KnowledgeService()
     # t = knowledge_service.get_knowledge("org.jabref.model.metadata.ContentSelectors")
-    t = knowledge_service.api_contains_method("org.jabref.model.metadata.event.MetaDataChangedEvent")
+    # t = knowledge_service.api_contains_method("org.jabref.model.metadata.event.MetaDataChangedEvent")
+    # print(t)
+    t = knowledge_service.api_father_class("org.jabref.logic.importer.ParserResult")
+    print(t)
+    t = knowledge_service.get_api_implement_class("org.jabref.logic.importer.ParserResult")
     # t = knowledge_service.get_knowledge("org.jabref.model.metadata.event.MetaDataChangedEvent")
     print(t)
