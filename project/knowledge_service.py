@@ -1,3 +1,4 @@
+from sekg.constant.code import CodeEntityRelationCategory
 from sekg.constant.constant import WikiDataConstance
 from sekg.graph.exporter.graph_data import GraphData
 
@@ -34,13 +35,17 @@ class KnowledgeService:
 
     def get_api_methods(self, api_id):
         res_list = []
-        res_list.extend(self.api_by_relation_search(api_id, RelationNameConstant.API_Be_Contained))
+        res_list.extend(self.api_by_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
+            CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
         return self.parse_res_list(res_list)
 
     def parse_res_list(self, res_list):
         parse_res = []
         for relation_type, node in res_list:
-            parse_res.append({"relation": relation_type, "name": self.get_name_of_node_by_different_label(node)})
+            t = {"relation": relation_type, "name": self.get_name_of_node_by_different_label(node)}
+            if "properties" in node and 'full_description' in node["properties"]:
+                t["full_description"] = node["properties"]["full_description"]
+            parse_res.append(t)
         return parse_res
 
     def get_name_of_node_by_different_label(self, node):
@@ -82,7 +87,7 @@ class KnowledgeService:
         candidates = self.graph_data.get_relations(start_id=None, relation_type=relation_type,
                                                    end_id=api_id)
         for (s, r, e) in candidates:
-            ontology_node = self.graph_data.get_node_info_dict(e)
+            ontology_node = self.graph_data.get_node_info_dict(s)
             node_list.append((r, ontology_node))
         return node_list
 
