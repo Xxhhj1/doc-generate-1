@@ -51,5 +51,14 @@ def api_knowledge():
     return jsonify(result)
 
 
+@app.route('/api_structure/', methods=["POST", "GET"])
+def api_knowledge():
+    if "qualified_name" not in request.json:
+        return "qualified_name need"
+    qualified_name = request.json['qualified_name']
+    result = knowledge_service.api_contains_method(qualified_name)
+    return jsonify(result)
+    
+
 if __name__ == '__main__':
     app.run()

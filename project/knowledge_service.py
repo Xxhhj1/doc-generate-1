@@ -32,6 +32,11 @@ class KnowledgeService:
         res_list.extend(self.api_relation_search(api_id, RelationNameConstant.Ontology_Parallel_Relation))
         return self.parse_res_list(res_list)
 
+    def get_api_methods(self, api_id):
+        res_list = []
+        res_list.extend(self.api_by_relation_search(api_id, RelationNameConstant.API_Be_Contained))
+        return self.parse_res_list(res_list)
+
     def parse_res_list(self, res_list):
         parse_res = []
         for relation_type, node in res_list:
@@ -72,6 +77,15 @@ class KnowledgeService:
             node_list.append((r, ontology_node))
         return node_list
 
+    def api_by_relation_search(self, api_id, relation_type):
+        node_list = []
+        candidates = self.graph_data.get_relations(start_id=None, relation_type=relation_type,
+                                                   end_id=api_id)
+        for (s, r, e) in candidates:
+            ontology_node = self.graph_data.get_node_info_dict(e)
+            node_list.append((r, ontology_node))
+        return node_list
+
     def get_api_id_by_name(self, name):
         node = self.graph_data.find_one_node_by_property(property_name=GraphData.DEFAULT_KEY_PROPERTY_QUALIFIED_NAME,
                                                          property_value=name)
@@ -93,9 +107,14 @@ class KnowledgeService:
         knowledge["category"] = self.get_api_category(api_id)
         return knowledge
 
+    def api_contains_method(self, api_name):
+        api_id = self.get_api_id_by_name(api_name)
+        return self.get_api_methods(api_id)
+
 
 if __name__ == '__main__':
     knowledge_service = KnowledgeService()
     # t = knowledge_service.get_knowledge("org.jabref.model.metadata.ContentSelectors")
-    t = knowledge_service.get_knowledge("org.jabref.model.metadata.event.MetaDataChangedEvent")
+    t = knowledge_service.api_contains_method("org.jabref.model.metadata.event.MetaDataChangedEvent")
+    # t = knowledge_service.get_knowledge("org.jabref.model.metadata.event.MetaDataChangedEvent")
     print(t)
