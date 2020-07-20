@@ -52,7 +52,7 @@ def api_knowledge():
 
 
 @app.route('/api_structure/', methods=["POST", "GET"])
-def api_knowledge():
+def api_structure():
     if "qualified_name" not in request.json:
         return "qualified_name need"
     qualified_name = request.json['qualified_name']
