@@ -48,7 +48,7 @@ class KnowledgeService:
 
     def get_method_doc_info(self, method_id):
         res = dict()
-        doc: MultiFieldDocument = doc_collection.get_by_id(method_id)
+        doc: MultiFieldDocument = self.doc_collection.get_by_id(method_id)
         full_description = doc.get_doc_text_by_field('full_description')
         res["full_description"] = full_description
         res["comment"] = doc.get_doc_text_by_field('dp_comment')
@@ -181,12 +181,12 @@ class KnowledgeService:
 
     def api_base_structure(self, api_name):
         # 继承树
-        api_id = knowledge_service.get_api_id_by_name(api_name)
+        api_id = self.get_api_id_by_name(api_name)
         res = dict()
-        res["methods"] = knowledge_service.get_api_methods(api_id)
-        res["extends"] = knowledge_service.api_father_class(api_id)
-        res["implements"] = knowledge_service.api_implement_class(api_id)
-        res["fields"] = knowledge_service.api_field(api_id)
+        res["methods"] = self.get_api_methods(api_id)
+        res["extends"] = self.api_father_class(api_id)
+        res["implements"] = self.api_implement_class(api_id)
+        res["fields"] = self.api_field(api_id)
         return res
 
     # 返回类下面5个最关键方法
@@ -202,32 +202,31 @@ class KnowledgeService:
         methods_list.sort(key=lambda x: x[1], reverse=True)
         return methods_list[:5]
 
+# if __name__ == '__main__':
+#     pro_name = "jabref"
+#     data_dir = PathUtil.doc(pro_name=pro_name, version="v1.1")
+#     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
+#
+#     knowledge_service = KnowledgeService(doc_collection)
+#     t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
+#     print(t)
+#     t = knowledge_service.api_base_structure("org.jabref.gui.entryeditor.FieldsEditorTab")
+#     print(t)
 
-if __name__ == '__main__':
-    pro_name = "jabref"
-    data_dir = PathUtil.doc(pro_name=pro_name, version="v1.1")
-    doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
-
-    knowledge_service = KnowledgeService(doc_collection)
-    t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
-    print(t)
-    t = knowledge_service.api_base_structure("org.jabref.gui.entryeditor.FieldsEditorTab")
-    print(t)
-
-    # t = knowledge_service.get_knowledge("org.jabref.model.metadata.ContentSelectors")
-    # print(t)
-    #
-    # api_id = knowledge_service.get_api_id_by_name("org.jabref.model.metadata.event.MetaDataChangedEvent")
-    # t = knowledge_service.get_api_methods(api_id)
-    # print(t)
-    # api_id = knowledge_service.get_api_id_by_name(
-    #     "org.jabref.gui.documentviewer.PageDimension.FixedHeightPageDimension")
-    #
-    # t = knowledge_service.api_father_class(api_id)
-    # print(t)
-    # api_id = knowledge_service.get_api_id_by_name("org.jabref.logic.bst.VM.MacroFunction")
-    # t = knowledge_service.api_implement_class(api_id)
-    # print(t)
-    # api_id = knowledge_service.get_api_id_by_name("org.jabref.gui.cleanup.CleanupAction")
-    # t = knowledge_service.api_field(api_id)
-    # print(t)
+# t = knowledge_service.get_knowledge("org.jabref.model.metadata.ContentSelectors")
+# print(t)
+#
+# api_id = knowledge_service.get_api_id_by_name("org.jabref.model.metadata.event.MetaDataChangedEvent")
+# t = knowledge_service.get_api_methods(api_id)
+# print(t)
+# api_id = knowledge_service.get_api_id_by_name(
+#     "org.jabref.gui.documentviewer.PageDimension.FixedHeightPageDimension")
+#
+# t = knowledge_service.api_father_class(api_id)
+# print(t)
+# api_id = knowledge_service.get_api_id_by_name("org.jabref.logic.bst.VM.MacroFunction")
+# t = knowledge_service.api_implement_class(api_id)
+# print(t)
+# api_id = knowledge_service.get_api_id_by_name("org.jabref.gui.cleanup.CleanupAction")
+# t = knowledge_service.api_field(api_id)
+# print(t)
