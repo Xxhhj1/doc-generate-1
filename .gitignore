@@ -109,3 +109,6 @@ output/
 # ignore office doc
 ~*.xlsx
 ~*.doc
+
+# ignore MAC file
+.DS_Store
