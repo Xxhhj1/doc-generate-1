@@ -9,7 +9,7 @@ from project.utils.path_util import PathUtil
 
 class KnowledgeService:
     def __init__(self):
-        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.3")
+        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.4")
         self.graph_data = GraphData.load(graph_data_path)
 
     def get_api_characteristic(self, api_id):
@@ -135,6 +135,19 @@ class KnowledgeService:
             return []
         api_id = self.get_api_id_by_name(api_name)
         return self.get_api_father_class(api_id)
+
+    # 返回类下面5个最关键方法
+    def get_key_methods(self, api_name):
+        methods = self.api_contains_method(api_name)
+        methods_list = []
+        for i in range(len(methods)):
+            method_name = methods[i]["name"]
+            method_value = \
+            self.graph_data.find_nodes_by_ids(self.get_api_id_by_name(method_name))[0]["properties"]["pr_value"]
+            methods_list.append((method_name, method_value))
+
+        methods_list.sort(key=lambda x: x[1], reverse=True)
+        return methods_list[:5]
 
 if __name__ == '__main__':
     knowledge_service = KnowledgeService()
