@@ -67,10 +67,10 @@
 
 ### v1.0
 
-1. 继承树 
+1. 继承树 (蒙秀杰)
    - extend (缺失用java.lang.Object)
    - implements 
-2. 类下面的基本方法展示
+2. 类下面的基本方法展示 (刘阳)
    - 类下面的方法展示, 参数, 返回值
    - 类下面的field
    - 类下面的constructor
