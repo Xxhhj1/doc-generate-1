@@ -20,5 +20,4 @@ class DocService:
 
 if __name__ == '__main__':
     doc_service = DocService()
-
     doc_service.extract_all_doc()

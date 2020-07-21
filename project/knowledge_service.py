@@ -37,7 +37,25 @@ class KnowledgeService:
         res_list = []
         res_list.extend(self.api_by_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
             CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
-        return self.parse_res_list(res_list)
+        method_list = self.parse_res_list(res_list)
+        for m in method_list:
+            m["parameters"] = self.method_parameter(m["id"])
+            m["return_value"] = self.method_return_value(m["id"])
+        return method_list
+
+    def method_parameter(self, method_id):
+        res_list = []
+        res_list.extend(self.api_relation_search(method_id, CodeEntityRelationCategory.category_code_to_str_map[
+            CodeEntityRelationCategory.RELATION_CATEGORY_HAS_PARAMETER]))
+        return res_list
+
+    def method_return_value(self, method_id):
+        res_list = []
+        res_list.extend(self.api_relation_search(method_id, CodeEntityRelationCategory.category_code_to_str_map[
+            CodeEntityRelationCategory.RELATION_CATEGORY_HAS_RETURN_VALUE]))
+        if len(res_list) > 0:
+            return res_list[0]
+        return dict()
 
     def get_api_father_class(self, api_id):
         # API 的父类是什么
@@ -56,7 +74,7 @@ class KnowledgeService:
     def parse_res_list(self, res_list):
         parse_res = []
         for relation_type, node in res_list:
-            t = {"relation": relation_type, "name": self.get_name_of_node_by_different_label(node)}
+            t = {"id": node["id"], "relation": relation_type, "name": self.get_name_of_node_by_different_label(node)}
             if "properties" in node and 'full_description' in node["properties"]:
                 t["full_description"] = node["properties"]["full_description"]
             parse_res.append(t)
@@ -92,8 +110,8 @@ class KnowledgeService:
         candidates = self.graph_data.get_relations(start_id=api_id, relation_type=relation_type,
                                                    end_id=None)
         for (s, r, e) in candidates:
-            ontology_node = self.graph_data.get_node_info_dict(e)
-            node_list.append((r, ontology_node))
+            end_node = self.graph_data.get_node_info_dict(e)
+            node_list.append((r, end_node))
         return node_list
 
     def api_by_relation_search(self, api_id, relation_type):
@@ -101,8 +119,8 @@ class KnowledgeService:
         candidates = self.graph_data.get_relations(start_id=None, relation_type=relation_type,
                                                    end_id=api_id)
         for (s, r, e) in candidates:
-            ontology_node = self.graph_data.get_node_info_dict(s)
-            node_list.append((r, ontology_node))
+            start_node = self.graph_data.get_node_info_dict(s)
+            node_list.append((r, start_node))
         return node_list
 
     def get_api_id_by_name(self, name):
@@ -130,19 +148,57 @@ class KnowledgeService:
         api_id = self.get_api_id_by_name(api_name)
         return self.get_api_methods(api_id)
 
-    def api_father_class(self, api_name):
-        if api_name.find("(") > 0:
-            return []
-        api_id = self.get_api_id_by_name(api_name)
-        return self.get_api_father_class(api_id)
+    def api_father_class(self, api_id):
+        res = dict()
+        father_class_list = self.get_api_father_class(api_id)
+        if len(father_class_list) > 0:
+            return father_class_list[0]
+        else:
+            res = {"relation": CodeEntityRelationCategory.category_code_to_str_map[
+                CodeEntityRelationCategory.RELATION_CATEGORY_EXTENDS], "name": "java.lang.Object"}
+            return res
+
+    def api_implement_class(self, api_id):
+        get_api_implement_class_list = self.get_api_implement_class(api_id)
+        return get_api_implement_class_list
+
+    def api_field(self, api_id):
+        res_list = []
+        res_list.extend(self.api_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
+            CodeEntityRelationCategory.RELATION_CATEGORY_HAS_FIELD]))
+        return res_list
+
+    def api_base_structure(self, api_name):
+        # 继承树
+        api_id = knowledge_service.get_api_id_by_name(api_name)
+        res = dict()
+        res["methods"] = knowledge_service.get_api_methods(api_id)
+        res["extends"] = knowledge_service.api_father_class(api_id)
+        res["implements"] = knowledge_service.api_implement_class(api_id)
+        res["fields"] = knowledge_service.api_field(api_id)
+        return res
 
 if __name__ == '__main__':
     knowledge_service = KnowledgeService()
+    t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
+    print(t)
+    t = knowledge_service.api_base_structure("org.jabref.gui.entryeditor.FieldsEditorTab")
+    print(t)
+
     # t = knowledge_service.get_knowledge("org.jabref.model.metadata.ContentSelectors")
-    # t = knowledge_service.api_contains_method("org.jabref.model.metadata.event.MetaDataChangedEvent")
     # print(t)
-    t = knowledge_service.api_father_class("org.jabref.logic.importer.ParserResult")
-    print(t)
-    t = knowledge_service.get_api_implement_class("org.jabref.logic.importer.ParserResult")
-    # t = knowledge_service.get_knowledge("org.jabref.model.metadata.event.MetaDataChangedEvent")
-    print(t)
+    #
+    # api_id = knowledge_service.get_api_id_by_name("org.jabref.model.metadata.event.MetaDataChangedEvent")
+    # t = knowledge_service.get_api_methods(api_id)
+    # print(t)
+    # api_id = knowledge_service.get_api_id_by_name(
+    #     "org.jabref.gui.documentviewer.PageDimension.FixedHeightPageDimension")
+    #
+    # t = knowledge_service.api_father_class(api_id)
+    # print(t)
+    # api_id = knowledge_service.get_api_id_by_name("org.jabref.logic.bst.VM.MacroFunction")
+    # t = knowledge_service.api_implement_class(api_id)
+    # print(t)
+    # api_id = knowledge_service.get_api_id_by_name("org.jabref.gui.cleanup.CleanupAction")
+    # t = knowledge_service.api_field(api_id)
+    # print(t)

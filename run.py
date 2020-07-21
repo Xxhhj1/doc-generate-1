@@ -56,9 +56,7 @@ def api_structure():
     if "qualified_name" not in request.json:
         return "qualified_name need"
     qualified_name = request.json['qualified_name']
-    result = dict()
-    # 类下面有哪些方法
-    result["has_methods"] = knowledge_service.api_contains_method(qualified_name)
+    result = knowledge_service.api_base_structure(qualified_name)
     return jsonify(result)
 
 
