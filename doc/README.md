@@ -78,7 +78,7 @@
 
 ### v1.1 
 
-- [ ] 类的可视化图展示 (徐焕珺)](http://bigcode.fudan.edu.cn/kg/index.html#/ElementGraph/890)
+- [ ] [类的可视化图展示](http://bigcode.fudan.edu.cn/kg/index.html#/ElementGraph/890) (徐焕珺)
 
 - [ ] 相关概念 (刘阳)
   - 相关概念抽取
@@ -97,8 +97,7 @@
 ### v1.3
 
 - [ ] 相关方法, 相关类展示 (蒙秀杰)
-
-- [ ] simrank算法
+  - simrank算法
 
 - [ ] 方法的样例代码展示 (蒙秀杰)
   - 将抽取到的代码放到dc里
