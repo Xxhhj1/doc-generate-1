@@ -67,7 +67,7 @@
 
 ### v1.0
 
-1. 继承树 (蒙秀杰)
+1. 继承树 (刘阳)
    - extend (缺失用java.lang.Object)
    - implements 
 2. 类下面的基本方法展示 (刘阳)
