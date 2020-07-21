@@ -39,7 +39,7 @@
 
 ### graph_data中node的信息
 
-```json
+```
 {
  'id': 1000, 
  'properties': {
