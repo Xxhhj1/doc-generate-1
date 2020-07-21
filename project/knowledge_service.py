@@ -181,6 +181,9 @@ class KnowledgeService:
         res_list = []
         res_list.extend(self.api_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
             CodeEntityRelationCategory.RELATION_CATEGORY_HAS_FIELD]))
+        for r in res_list:
+            r[1]['labels'] = list(r[1]['labels'])
+
         return res_list
 
     def api_base_structure(self, api_name):
