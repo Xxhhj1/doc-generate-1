@@ -8,7 +8,7 @@ from project.utils.path_util import PathUtil
 app = Flask(__name__)
 pro_name = "jabref"
 data_dir = PathUtil.doc(pro_name=pro_name, version="v1")
-graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1")
+graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.4")
 graph_data: GraphData = GraphData.load(graph_data_path)
 doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 knowledge_service = KnowledgeService()
@@ -57,6 +57,20 @@ def api_structure():
         return "qualified_name need"
     qualified_name = request.json['qualified_name']
     result = knowledge_service.api_base_structure(qualified_name)
+    return jsonify(result)
+
+
+# return top5 key methods of specific class
+@app.route('/key_methods/', methods=["POST", "GET"])
+def key_methods():
+    if "qualified_name" not in request.json:
+        return "qualified_name need"
+    qualified_name = request.json['qualified_name']
+    methods_list = knowledge_service.get_key_methods(qualified_name)
+    for i in range(len(methods_list)):
+        methods_list[i] = methods_list[i][0]
+    result = dict()
+    result["key_methods"] = methods_list
     return jsonify(result)
 
 

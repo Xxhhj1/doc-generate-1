@@ -10,13 +10,5 @@ if __name__ == '__main__':
     qualified_name = "org.jabref.model.entry.BibEntry"
     graph_data: GraphData = GraphData.load(graph_data_path)
 
-    methods = knowledge_service.api_contains_method(qualified_name)
-    methods_list = []
-    for i in range(len(methods)):
-        method_name = methods[i]["name"]
-        method_value = graph_data.find_nodes_by_ids(knowledge_service.get_api_id_by_name(method_name))[0]["properties"]["pr_value"]
-        methods_list.append((method_name, method_value))
-
-    methods_list.sort(key=lambda x:x[1], reverse=True)
-    for i in range(10):
-        print(methods_list[i])
+    result = KnowledgeService().get_key_methods(qualified_name)
+    print(result)
