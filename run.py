@@ -7,11 +7,11 @@ from project.utils.path_util import PathUtil
 
 app = Flask(__name__)
 pro_name = "jabref"
-data_dir = PathUtil.doc(pro_name=pro_name, version="v1")
+data_dir = PathUtil.doc(pro_name=pro_name, version="v1.1")
 graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.4")
 graph_data: GraphData = GraphData.load(graph_data_path)
 doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
-knowledge_service = KnowledgeService()
+knowledge_service = KnowledgeService(doc_collection)
 
 
 @app.route('/')

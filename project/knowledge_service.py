@@ -1,6 +1,7 @@
 from sekg.constant.code import CodeEntityRelationCategory
 from sekg.constant.constant import WikiDataConstance
 from sekg.graph.exporter.graph_data import GraphData
+from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
 
 from project.extractor_module.constant.constant import RelationNameConstant, FeatureConstant, DomainConstant, \
     FunctionalityConstant, SentenceConstant, CodeConstant
@@ -8,9 +9,10 @@ from project.utils.path_util import PathUtil
 
 
 class KnowledgeService:
-    def __init__(self):
-        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.4")
+    def __init__(self, doc_collection):
+        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.3")
         self.graph_data = GraphData.load(graph_data_path)
+        self.doc_collection = doc_collection
 
     def get_api_characteristic(self, api_id):
         res_list = []
@@ -41,7 +43,16 @@ class KnowledgeService:
         for m in method_list:
             m["parameters"] = self.method_parameter(m["id"])
             m["return_value"] = self.method_return_value(m["id"])
+            m["doc_info"] = self.get_method_doc_info(m["id"])
         return method_list
+
+    def get_method_doc_info(self, method_id):
+        res = dict()
+        doc: MultiFieldDocument = doc_collection.get_by_id(method_id)
+        full_description = doc.get_doc_text_by_field('full_description')
+        res["full_description"] = full_description
+        res["comment"] = doc.get_doc_text_by_field('dp_comment')
+        return res
 
     def method_parameter(self, method_id):
         res_list = []
@@ -185,14 +196,19 @@ class KnowledgeService:
         for i in range(len(methods)):
             method_name = methods[i]["name"]
             method_value = \
-            self.graph_data.find_nodes_by_ids(self.get_api_id_by_name(method_name))[0]["properties"]["pr_value"]
+                self.graph_data.find_nodes_by_ids(self.get_api_id_by_name(method_name))[0]["properties"]["pr_value"]
             methods_list.append((method_name, method_value))
 
         methods_list.sort(key=lambda x: x[1], reverse=True)
         return methods_list[:5]
 
+
 if __name__ == '__main__':
-    knowledge_service = KnowledgeService()
+    pro_name = "jabref"
+    data_dir = PathUtil.doc(pro_name=pro_name, version="v1.1")
+    doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
+
+    knowledge_service = KnowledgeService(doc_collection)
     t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
     print(t)
     t = knowledge_service.api_base_structure("org.jabref.gui.entryeditor.FieldsEditorTab")
