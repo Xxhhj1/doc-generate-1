@@ -10,7 +10,7 @@ from project.utils.path_util import PathUtil
 
 class KnowledgeService:
     def __init__(self, doc_collection):
-        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.3")
+        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.4")
         self.graph_data = GraphData.load(graph_data_path)
         self.doc_collection = doc_collection
 
