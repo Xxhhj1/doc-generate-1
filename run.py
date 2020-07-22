@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
 from sekg.graph.exporter.graph_data import GraphData
 
@@ -6,7 +7,9 @@ from project.knowledge_service import KnowledgeService
 from project.doc_service import DocService
 from project.utils.path_util import PathUtil
 
+
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 pro_name = "jabref"
 data_dir = PathUtil.doc(pro_name=pro_name, version="v1.1")
 graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.4")
