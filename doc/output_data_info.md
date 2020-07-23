@@ -16,4 +16,4 @@
 | :------------: | :--------------------------------------------: |
 |  jabref.v1.dc  |                  初试文档信息                  |
 | jabref.v1.1.dc |      加入机器学习注释, 在`dp_comment`字段      |
-| jabref.v1.2.dc | 加入一个最短的sample_code, 在`sample_code`字段 |
+| jabref.v1.2.dc | 加入sample_code(最多5个), 在`sample_code`字段 |
