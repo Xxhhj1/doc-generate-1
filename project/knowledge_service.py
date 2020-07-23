@@ -155,7 +155,7 @@ class KnowledgeService:
             knowledge["message"] = "can't find api by name"
             return knowledge
         knowledge["characteristic"] = self.get_api_characteristic(api_id)
-        knowledge["functionality"] = self.get_api_functionality(api_id)
+        # knowledge["functionality"] = self.get_api_functionality(api_id)
         knowledge["category"] = self.get_api_category(api_id)
         return knowledge
 
