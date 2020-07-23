@@ -10,7 +10,7 @@ from project.utils.path_util import PathUtil
 
 class KnowledgeService:
     def __init__(self, doc_collection):
-        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.4")
+        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.5")
         self.graph_data = GraphData.load(graph_data_path)
         self.doc_collection = doc_collection
 
@@ -216,11 +216,12 @@ if __name__ == '__main__':
     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 
     knowledge_service = KnowledgeService(doc_collection)
-    t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
-    print(t)
-    t = knowledge_service.api_base_structure("org.jabref.gui.entryeditor.FieldsEditorTab")
-    print(t)
+    # t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
+    # print(t)
+    # t = knowledge_service.api_base_structure("org.jabref.gui.entryeditor.FieldsEditorTab")
+    # print(t)
 
+    t = knowledge_service.get_knowledge("org.jabref.gui.actions.OldDatabaseCommandWrapper")
     t = knowledge_service.get_knowledge("org.jabref.model.metadata.ContentSelectors")
     print(t)
 

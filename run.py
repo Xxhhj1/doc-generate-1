@@ -34,14 +34,14 @@ def doc_info():
     result = doc_service.get_doc_info(node['id'])
     return jsonify(result)
 
-#
-# @app.route('/api_knowledge/', methods=["POST", "GET"])
-# def api_knowledge():
-#     if "qualified_name" not in request.json:
-#         return "qualified_name need"
-#     qualified_name = request.json['qualified_name']
-#     result = knowledge_service.get_knowledge(qualified_name)
-#     return jsonify(result)
+
+@app.route('/api_knowledge/', methods=["POST", "GET"])
+def api_knowledge():
+    if "qualified_name" not in request.json:
+        return "qualified_name need"
+    qualified_name = request.json['qualified_name']
+    result = knowledge_service.get_knowledge(qualified_name)
+    return jsonify(result)
 
 
 @app.route('/api_structure/', methods=["POST", "GET"])

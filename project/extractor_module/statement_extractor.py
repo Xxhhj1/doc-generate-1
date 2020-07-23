@@ -26,7 +26,7 @@ class StatementExtractor:
              "often", "therefore", "first", "second", "still", "rarely", "true",
              "usually", "most likely", "so far", "instead", "possibly", "exactly", "generally",
              "explicitly", "even", "later", "to do this", "simply", "as well", 'where', 'whenever', 'wherever', 'to',
-             'once', 'twice'})
+             'once', 'twice', "new"})
         self.allow_like_word = {'allow', 'permit', 'grant'}
         self.depend_on_like_word = {'depend', 'rely', 'count'}
         self.limit_like_word = {'limit', 'confine', 'restrict'}
