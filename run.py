@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
 from sekg.graph.exporter.graph_data import GraphData
 
@@ -6,7 +7,9 @@ from project.knowledge_service import KnowledgeService
 from project.doc_service import DocService
 from project.utils.path_util import PathUtil
 
+
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 pro_name = "jabref"
 data_dir = PathUtil.doc(pro_name=pro_name, version="v1.1")
 graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.4")
@@ -62,6 +65,22 @@ def key_methods():
     result = dict()
     result["key_methods"] = methods_list
     return jsonify(result)
+
+
+# return sample code of specific class/method
+@app.route('/sample_code/', methods=['POST', 'GET'])
+def sample_code():
+    if 'qualified_name' not in request.json:
+        return 'qualified name need'
+    qualified_name = request.json['qualified_name']
+    api_id = knowledge_service.get_api_id_by_name(qualified_name)
+    if api_id is -1:
+        return 'wrong qualified name'
+    sample_code = doc_service.get_sample_code(api_id)
+    if sample_code is None:
+        return "no sample code"
+    else:
+        return sample_code
 
 
 if __name__ == '__main__':
