@@ -45,8 +45,8 @@ class EntityExtractorForText:
         self.tfidf_sim = 0.4
         self.stopwords = set(stopwords.words("english"))
         self.lemmatizer = WordNetLemmatizer()
-        self.min_e = 1  #左右熵的最小阈值
-        self.min_p = 2  #互信息的最小阈值
+        self.min_e = 1  # 左右熵的最小阈值
+        self.min_p = 2  # 互信息的最小阈值
         self.tf_idf_flag = False
         self.lemma_map = {}
 
@@ -623,6 +623,10 @@ class EntityExtractorForText:
 
         return entity_dic
 
+    def extract_all_text(self):
+
+        pass
+
 
 if __name__ == '__main__':
     processor = EntityExtractorForText()
@@ -632,16 +636,16 @@ if __name__ == '__main__':
     # 只抽取名词
     r = processor.extract_clean_entity_name_from_text(text)
     print(r)
-    # 抽取名词和动词
-    r = processor.get_all_possible_key_word_from_text(text)
-    print(r)
-    # 基于互信息和左右熵的新词发现，需要较大规模语料，还需要调整参数 self.min_e，self.min_p，这两个参数越大，说明单词的质量高，当然，相应的数量也就会减少，自行调整
-    n_gram_list = processor.create_ngram_list(processor.clean_text(text), n=3)
-    r = processor.find_new_words(n_gram_list, text)
-    print(r)
-    # 综合抽取，目前只是简单合并每一种抽取方式，需要修改，比如单纯的名词抽取可能不可靠，会抽取一些很少出现的名词，可以结合TF-IDF一起过滤
-    # 目前新词发现和TF-IDF的语料都是N-gram处理的
-    # 注意:使用TF-IDF，需要先构建模型和字典，processor = EntityExtractorForText(tf_idf_model_dir=None, corpus_list=None)，这两个参数必填
-    # tf-idf,调整参数：self.tfidf_sim
-    r = processor.extract([text])
-    print(r)
+    # # 抽取名词和动词
+    # r = processor.get_all_possible_key_word_from_text(text)
+    # print(r)
+    # # 基于互信息和左右熵的新词发现，需要较大规模语料，还需要调整参数 self.min_e，self.min_p，这两个参数越大，说明单词的质量高，当然，相应的数量也就会减少，自行调整
+    # n_gram_list = processor.create_ngram_list(processor.clean_text(text), n=3)
+    # r = processor.find_new_words(n_gram_list, text)
+    # print(r)
+    # # 综合抽取，目前只是简单合并每一种抽取方式，需要修改，比如单纯的名词抽取可能不可靠，会抽取一些很少出现的名词，可以结合TF-IDF一起过滤
+    # # 目前新词发现和TF-IDF的语料都是N-gram处理的
+    # # 注意:使用TF-IDF，需要先构建模型和字典，processor = EntityExtractorForText(tf_idf_model_dir=None, corpus_list=None)，这两个参数必填
+    # # tf-idf,调整参数：self.tfidf_sim
+    # r = processor.extract([text])
+    # print(r)

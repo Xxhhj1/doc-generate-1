@@ -6,7 +6,7 @@ from project.utils.path_util import PathUtil
 class DocService:
     def __init__(self):
         pro_name = "jabref"
-        data_dir = PathUtil.doc(pro_name=pro_name, version="v1")
+        data_dir = PathUtil.doc(pro_name=pro_name, version="v1.1")
         self.doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 
     def extract_all_doc(self):
