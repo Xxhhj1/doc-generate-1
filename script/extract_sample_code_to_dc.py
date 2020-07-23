@@ -27,8 +27,6 @@ def find_doc(qualified_name):
 
 
 if __name__ == '__main__':
-    error_count = 0
-
     with open(api_to_example_json_path, 'r') as f:
         api_to_mid = json.load(f)
     f.close()
@@ -39,19 +37,14 @@ if __name__ == '__main__':
         methods_info.append(json.loads(method)['method'])
 
     for qualified_name in iter(api_to_mid):
-        print('start process ' + qualified_name)
         doc = find_doc(qualified_name)
-        mid = api_to_mid[qualified_name][0]
-        sample_code = methods_info[mid-1]
-        if sample_code is None or doc is None:
-            print('can not find doc or sample code of ' + qualified_name)
-            print(mid)
-            print(sample_code)
-            error_count += 1
-            raise TypeError(qualified_name + " is None")
-        doc.add_field(field_name='sample_code', field_document=sample_code)
-
-    print(error_count)
-    if error_count is 0:
+        if doc is None:
+            raise ValueError('doc of {} not found'.format(qualified_name))
+        mid_list = api_to_mid[qualified_name]
+        sample_code_list = list()
+        for i in range(min(5, len(mid_list))):
+            mid = mid_list[i]
+            sample_code_list.append(methods_info[mid-1])
+        doc.add_field(field_name='sample_code', field_document=sample_code_list)
         doc_collection.save(doc_collection_save_path)
 
