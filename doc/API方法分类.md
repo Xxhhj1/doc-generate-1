@@ -11,7 +11,7 @@
   - constructor
   - copy方法: 拷贝对象
   - factory方法: 实例化一个对象然后返回
-- degenerate
+- undefined
   - abstract方法
   - empty方法
   - incidental: 除以上各例外的其他方法
