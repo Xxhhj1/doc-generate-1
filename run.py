@@ -7,7 +7,6 @@ from project.knowledge_service import KnowledgeService
 from project.doc_service import DocService
 from project.utils.path_util import PathUtil
 
-
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 pro_name = "jabref"
@@ -65,6 +64,15 @@ def key_methods():
     result = dict()
     result["key_methods"] = methods_list
     return jsonify(result)
+
+
+@app.route('/terminology/', methods=["POST", "GET"])
+def api_terminologies():
+    if "qualified_name" not in request.json:
+        return "qualified_name need"
+    qualified_name = request.json['qualified_name']
+    terminology_list = knowledge_service.get_api_terminologies(qualified_name)
+    return jsonify(terminology_list)
 
 
 # return sample code of specific class/method

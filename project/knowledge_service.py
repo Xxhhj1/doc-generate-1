@@ -10,7 +10,7 @@ from project.utils.path_util import PathUtil
 
 class KnowledgeService:
     def __init__(self, doc_collection):
-        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.5")
+        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.6")
         self.graph_data = GraphData.load(graph_data_path)
         self.doc_collection = doc_collection
 
@@ -85,6 +85,23 @@ class KnowledgeService:
         res_list.extend(self.api_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
             CodeEntityRelationCategory.RELATION_CATEGORY_IMPLEMENTS]))
         return self.parse_res_list(res_list)
+
+    def get_api_terminologies(self, api_name):
+        """
+        API的术语
+        :return []:
+        """
+        api_id = self.get_api_id_by_name(api_name)
+        if api_id == -1:
+            return []
+        candidates = self.graph_data.get_relations(start_id=api_id, relation_type="has terminology",
+                                                   end_id=None)
+        node_list = []
+        for (s, r, e) in candidates:
+            end_node = self.graph_data.get_node_info_dict(e)
+            node_list.append((end_node['properties']['terminology_name'], end_node['properties']["score"]))
+        sorted(node_list, key=lambda x: x[1], reverse=True)
+        return node_list
 
     def parse_res_list(self, res_list):
         parse_res = []
@@ -216,6 +233,7 @@ if __name__ == '__main__':
     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 
     knowledge_service = KnowledgeService(doc_collection)
+    knowledge_service.get_api_terminologies("org.jabref.logic.importer.fileformat.EndnoteImporter.A_PATTERN")
     # t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
     # print(t)
     # t = knowledge_service.api_base_structure("org.jabref.gui.entryeditor.FieldsEditorTab")
