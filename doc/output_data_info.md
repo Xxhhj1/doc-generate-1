@@ -1,13 +1,15 @@
 ## graph
 
-|       版本        |                    图信息                    |
-| :---------------: | :------------------------------------------: |
-|  jabref.v1.graph  |                  初始图信息                  |
-| jabref.v1.1.graph |                                              |
-| jabref.v1.2.graph |                                              |
-| jabref.v1.3.graph |                                              |
-| jabref.v1.4.graph |  pagerank计算每个节点的值, 在`pr_value`字段  |
-| jabref.v1.5.graph | 给api方法进行分类,将分类结果写入`labels`字段 |
+|       版本        |                   图信息                    |
+| :---------------: | :-----------------------------------------: |
+|  jabref.v1.graph  |                 初始图信息                  |
+| jabref.v1.1.graph |                                             |
+| jabref.v1.2.graph |                                             |
+| jabref.v1.3.graph |                                             |
+| jabref.v1.4.graph | pagerank计算每个节点的值, 在`pr_value`字段  |
+| jabref.v1.5.graph |                                             |
+| jabref.v1.6.graph |                                             |
+| jabref.v1.7.graph | 给api方法进行分类, 分类结果写入`labels`字段 |
 
 
 

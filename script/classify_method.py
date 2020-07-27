@@ -8,9 +8,9 @@ from project.classification_module.method_classification import split
 if __name__ == '__main__':
     # 1. 得到图中所有方法节点 2. qualified_name传入classification中做判断
     pro_name = "jabref"
-    graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.4")
+    graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.6")
     graph_data: GraphData = GraphData.load(graph_data_path)
-    graph_data_output_path = PathUtil.graph_data(pro_name=pro_name, version='v1.5')
+    graph_data_output_path = PathUtil.graph_data(pro_name=pro_name, version='v1.7')
     methods_id: set = graph_data.get_node_ids_by_label("method")
     nouns = {x.name().split('.', 1)[0] for x in wn.all_synsets('n')}
     verbs = {x.name().split('.', 1)[0] for x in wn.all_synsets('v')}
@@ -29,25 +29,25 @@ if __name__ == '__main__':
 
         if label is "accessor":
             count[0] += 1
-            # graph_data.add_label_by_node_id(node_id=i, label='accessor method')
+            graph_data.add_label_by_node_id(node_id=i, label='accessor method')
         elif label is "mutator":
             count[1] += 1
-            # graph_data.add_label_by_node_id(node_id=i, label='mutator method')
+            graph_data.add_label_by_node_id(node_id=i, label='mutator method')
         elif label is "creational":
             count[2] += 1
             # print(qualified_name)
-            # graph_data.add_label_by_node_id(node_id=i, label='creational method')
+            graph_data.add_label_by_node_id(node_id=i, label='creational method')
         elif label is "constructor":
             count[3] += 1
-            print(qualified_name)
-            # graph_data.add_label_by_node_id(node_id=i, label='constructor method')
+            # print(qualified_name)
+            graph_data.add_label_by_node_id(node_id=i, label='constructor method')
         else:
             # print(qualified_name)
-            # graph_data.add_label_by_node_id(node_id=i, label='undefined method')
+            graph_data.add_label_by_node_id(node_id=i, label='undefined method')
             count[4] += 1
 
     print(count)
     print(sum(count))
-    # graph_data.save(graph_data_output_path)
+    graph_data.save(graph_data_output_path)
 
 
