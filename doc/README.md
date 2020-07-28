@@ -16,53 +16,6 @@
    4. the role of the class in applicable design pattern
    5. known issues and limitation
 
-
-
-## 现有数据信息
-
-### doc信息
-
-```json
-{
-  "full_html_description": 
-  "<ul>\r\n<li>Names are given as first name, von and last name.</li>\r\n<li>Individual authors separated by comma.</li>\r\n<li>The and of a list of three or more authors is preceeded by a comma\r\n(Oxford comma)</li>\r\n</ul>",
- "full_description": 
-  " Names are given as first name, von and last name. Individual authors separated by comma. The and of a list of three or more authors is preceeded by a comma (Oxford comma) ",
- "sentence_description": 
-  [
-    " Names are given as first name, von and last name.",
-    "Individual authors separated by comma.",
-    "The and of a list of three or more authors is preceeded by a comma (Oxford comma)"
-  ]
-}
-```
-
-### graph_data中node的信息
-
-```
-{
- 'id': 1000, 
- 'properties': {
-   'qualified_name': 'org.jabref.logic.layout.format.AuthorLastFirstAbbrCommas', 
-   'entity_category': 2, 
-   'api_id': 999, 
-   'description': "<ul>\r\n<li>Names are given in order: von last, jr, first.</li>\r\n<li>First names will be abbreviated.</li>\r\n<li>Individual authors are separated by commas.</li>\r\n<li>There is no comma before the 'and' at the end of a list of three or more authors</li>\r\n</ul>", 
-   'api_type': 2, 
-   'alias': ['AuthorLastFirstAbbrCommas', 'Author Last First Abbr Commas']
- }, 
- 'labels': {'class', 'type', 'entity', 'code_element'}
-  
-}
-```
-
-### graph data中relation的信息
-
-```
-{'has field', 'extends', 'implements', 'belong to', 'has return value', 'has exception condition', 'type of', 'has parameter'}
-```
-
-
-
 ## ToDo List
 
 ### v1.0
