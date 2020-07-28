@@ -6,7 +6,7 @@ import definitions
 from pathlib import Path
 
 pro_name = 'jabref'
-graph_data_path = PathUtil.graph_data(pro_name=pro_name, version='v1.4')
+graph_data_path = PathUtil.graph_data(pro_name=pro_name, version='v1.8')
 doc_collection_path = PathUtil.doc(pro_name=pro_name, version='v1.1')
 doc_collection_save_path = PathUtil.doc(pro_name=pro_name, version='v1.2')
 api_to_example_json_path = Path(definitions.ROOT_DIR) / "output" / "json" / "api_2_example_sorted.json"
@@ -41,10 +41,17 @@ if __name__ == '__main__':
         if doc is None:
             raise ValueError('doc of {} not found'.format(qualified_name))
         mid_list = api_to_mid[qualified_name]
+        print(mid_list)
         sample_code_list = list()
-        for i in range(min(5, len(mid_list))):
-            mid = mid_list[i]
-            sample_code_list.append(methods_info[mid-1])
+        count = 0
+        index = 0
+        while count < 5 and index < len(mid_list):
+            print('check mid: ' + str(mid_list[index]))
+            method_info: str = methods_info[mid_list[index]-1]
+            index += 1
+            if method_info.find('{') is not -1 and method_info not in sample_code_list:
+                sample_code_list.append(method_info)
+                count += 1
+
         doc.add_field(field_name='sample_code', field_document=sample_code_list)
         doc_collection.save(doc_collection_save_path)
-
