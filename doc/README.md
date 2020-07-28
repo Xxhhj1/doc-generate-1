@@ -1,7 +1,5 @@
 # [DocGen Contest](https://dysdoc.github.io/docgen2/index.html)
 
-
-
 ## 比赛要求
 
 1. 输入class qualifed name, 输出HTML格式的开发者文档
@@ -61,7 +59,7 @@
   - 将抽取到的代码放到dc里
   - 利用文本匹配多行代码样例(参数申明)
 - [ ] 这个类如何使用和被使用的 (蒙秀杰)
-  - 如何使用使用这个类 - 类方法的return value为对应类名
+  - 如何使用这个类 - 类方法的return value为对应类名
   - 这个类如何被使用 - 类名作为方法的参数
 
 ### v1.4
