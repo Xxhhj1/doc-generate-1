@@ -5,6 +5,7 @@ from sekg.graph.exporter.graph_data import GraphData
 
 from project.knowledge_service import KnowledgeService
 from project.doc_service import DocService
+from project.json_service import JsonService
 from project.utils.path_util import PathUtil
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ graph_data: GraphData = GraphData.load(graph_data_path)
 doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 knowledge_service = KnowledgeService(doc_collection)
 doc_service = DocService()
+json_service = JsonService()
 
 
 @app.route('/')
@@ -90,6 +92,19 @@ def sample_code():
     else:
         return sample_code
 
+
+# return result which api as parameter and returen value
+@app.route('/parameter_return_value/', methods=['POST', 'GET'])
+def parameter_return_value():
+    if 'qualified_name' not in request.json:
+        return 'qualified name need'
+    qualified_name = request.json['qualified_name']
+    as_parameter_list = json_service.api_as_parameter(qualified_name)
+    as_return_value_list = json_service.api_as_return_value(qualified_name)
+    result = dict()
+    result['paramater'] = as_parameter_list
+    result['return_value'] = as_return_value_list
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run()
