@@ -46,6 +46,16 @@ class KnowledgeService:
             m["doc_info"] = self.get_method_doc_info(m["id"])
         return method_list
 
+    def get_desc_from_api_id(self, api_id):
+        doc: MultiFieldDocument = self.doc_collection.get_by_id(api_id)
+        if doc is None:
+            return ""
+        full_description = doc.get_doc_text_by_field('full_description')
+        if full_description == "":
+            short_description = doc.get_doc_text_by_field('short_description')
+            return short_description
+        return full_description
+
     def get_method_doc_info(self, method_id):
         res = dict()
         doc: MultiFieldDocument = self.doc_collection.get_by_id(method_id)
@@ -59,6 +69,8 @@ class KnowledgeService:
         res_list.extend(self.api_relation_search(method_id, CodeEntityRelationCategory.category_code_to_str_map[
             CodeEntityRelationCategory.RELATION_CATEGORY_HAS_PARAMETER]))
         for r in res_list:
+            if r[1]['properties']['short_description'] == "":
+                r[1]['properties']['short_description'] = self.get_desc_from_api_id(r[1]["id"])
             r[1]['labels'] = list(r[1]['labels'])
         return res_list
 
@@ -68,6 +80,8 @@ class KnowledgeService:
             CodeEntityRelationCategory.RELATION_CATEGORY_HAS_RETURN_VALUE]))
         if len(res_list) > 0:
             r = res_list[0]
+            if r[1]['properties']['description'] == "":
+                r[1]['properties']['description'] = self.get_desc_from_api_id(r[1]["id"])
             r[1]["labels"] = list(r[1]["labels"])
             return res_list[0]
         return dict()
@@ -233,9 +247,9 @@ if __name__ == '__main__':
     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 
     knowledge_service = KnowledgeService(doc_collection)
-    knowledge_service.get_api_terminologies("org.jabref.logic.importer.fileformat.EndnoteImporter.A_PATTERN")
-    # t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
-    # print(t)
+    # knowledge_service.get_api_terminologies("org.jabref.logic.importer.fileformat.EndnoteImporter.A_PATTERN")
+    t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
+    print(t)
     # t = knowledge_service.api_base_structure("org.jabref.gui.entryeditor.FieldsEditorTab")
     # print(t)
 
