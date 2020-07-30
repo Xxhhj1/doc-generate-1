@@ -41,6 +41,7 @@ class KnowledgeService:
             CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
         method_list = self.parse_res_list(res_list)
         for m in method_list:
+            m["declare"] = self.get_declare_from_method_name(m["name"])
             m["parameters"] = self.method_parameter(m["id"])
             m["return_value"] = self.method_return_value(m["id"])
             m["doc_info"] = self.get_method_doc_info(m["id"])
@@ -126,6 +127,14 @@ class KnowledgeService:
                 t["full_description"] = node["properties"]["full_description"]
             parse_res.append(t)
         return parse_res
+
+    def get_declare_from_method_name(self, method_name: str):
+        if method_name is None or method_name == "":
+            return ""
+        font = method_name[0:method_name.find("(")]
+        font = font.split(".")[-1]
+        font += method_name[method_name.find("("):]
+        return font
 
     def get_name_of_node_by_different_label(self, node):
         """
