@@ -72,7 +72,7 @@ class KnowledgeService:
         for r in res_list:
             if r[1]['properties']['short_description'] == "":
                 r[1]['properties']['short_description'] = self.get_desc_from_api_id(r[1]["id"])
-                r[1]['properties']['description'] = self.get_desc_from_api_id(r[1]["id"])
+            r[1]['properties']['description'] = r[1]['properties']['short_description']
             r[1]['labels'] = list(r[1]['labels'])
         return res_list
 
