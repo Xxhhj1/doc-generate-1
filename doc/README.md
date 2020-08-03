@@ -41,6 +41,9 @@
 6. [] 方法的详细信息表格，比照JDK文档，应该还有一种内容，说明当前方法抛出的异常和什么时候抛出异常。对应图里面的关系，应该是方法会有has exception condition这个关系，对应的实体就是描述什么时候会抛出什么类型的异常。对应的type字段是异常类的名字，name就是空，描述文本就是什么时候会抛异常。
 7. [] 当前方法的声明，full declaration 在方法的名字下面可以展示。或者目前的方法的名字可以换成比如getFieldAsKeywords(Field field,Character keywordSeparator)这个换成声明信息量大些。
 8. [] 比照JDK文档，应该有个地方是展示所有方法的表格，里面每个方法是表格一行，应该有三列：返回值类型，方法名字（带参数列表），方法的描述文本。
+9. [] 样式问题，所有表格，标题，英语的习惯是每个词的首字母都大写，Method detail=> Method Detail. title=>Title. 
+10. [] 这个不确定，Method detail感觉比较占空间，并且每个方法都有，是不是可以去掉？
+
 
 
 
