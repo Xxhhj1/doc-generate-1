@@ -61,16 +61,19 @@ class KnowledgeService:
     def get_method_doc_info(self, method_id):
         res = dict()
         doc: MultiFieldDocument = self.doc_collection.get_by_id(method_id)
+        print(doc)
         full_description = doc.get_doc_text_by_field('full_description')
         # res["full_description"] = full_description
         # res["comment"] = doc.get_doc_text_by_field('dp_comment')
         dp_comment = doc.get_doc_text_by_field('dp_comment')
         # 正则处理去掉多余字符
         dp_comment = re.sub(r"</?(.+?)>", "", dp_comment)
-        if full_description != "" or full_description is not None:
+        dp_comment = dp_comment.lstrip().rstrip()
+        print(full_description + '\n' + dp_comment)
+        if full_description != "" and full_description is not None:
             res['comment'] = full_description
-        elif dp_comment != "" or dp_comment is not None:
-            res['comment'] = 'DL Auto Generate:' + dp_comment
+        elif dp_comment != "" and dp_comment is not None:
+            res['comment'] = 'DL Auto Generate: ' + dp_comment
         else:
             res['comment'] = ''
         return res
