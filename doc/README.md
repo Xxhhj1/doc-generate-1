@@ -37,13 +37,12 @@
 - [ ] 继承树展示只有extends没有implements (已反馈给佳展学长)
 
 - [ ] 方法的注释其实有两个来源，深度学习模型生成的，和原来代码里面就有的。如果原来代码里面有，就直接展示代码有的，然后没有，展示深度学习模型生成的。并且深度学习模型生成的需要额外区分，比如统一前面加上（DL Auto Generateted）XXXX. 这个可以后端返回的时候做做判断添加。
-- [ ] 方法的详细信息的表格，name and type 的显示内容不对：比如目前是keywordKeyword keyword，是错误的。应该拆成
-  拆分成两列，type, name. 比如对于Keyword keyword这个参数，type=Keyword, name=keyword； 一个是类型，一个是形参名。 对于return value，type字段等于返回值类型，name字段为空。之后可以做的是为Type字段的内容加一个超链接，点击，直接打开一个新的界面，就是对应的类型的API文档。（其实就是打开一个新的界面，并且search的输入是对应的Type），所以后端返回的时候最好能返回type的全限定名，前端展示可以只展示权限定名的最后一截。
+- [ ] 方法的详细信息的表格，name and type 的显示内容不对：比如目前是keywordKeyword keyword，是错误的。应该拆分成两列，type, name. 比如对于Keyword keyword这个参数，type=Keyword, name=keyword； 一个是类型，一个是形参名。 对于return value，type字段等于返回值类型，name字段为空。之后可以做的是为Type字段的内容加一个超链接，点击，直接打开一个新的界面，就是对应的类型的API文档。（其实就是打开一个新的界面，并且search的输入是对应的Type），所以后端返回的时候最好能返回type的全限定名，前端展示可以只展示权限定名的最后一截。
 - [ ] 方法的详细信息表格，比照JDK文档，应该还有一种内容，说明当前方法抛出的异常和什么时候抛出异常。对应图里面的关系，应该是方法会有has exception condition这个关系，对应的实体就是描述什么时候会抛出什么类型的异常。对应的type字段是异常类的名字，name就是空，描述文本就是什么时候会抛异常。
 - [ ] 当前方法的声明，full declaration 在方法的名字下面可以展示。或者目前的方法的名字可以换成比如getFieldAsKeywords(Field field,Character keywordSeparator)这个换成声明信息量大些。
 - [ ] 比照JDK文档，应该有个地方是展示所有方法的表格，里面每个方法是表格一行，应该有三列：返回值类型，方法名字（带参数列表），方法的描述文本。
-- [ ] 样式问题，所有表格，标题，英语的习惯是每个词的首字母都大写，Method detail=> Method Detail. title=>Title. 
-- [ ] 这个不确定，Method detail感觉比较占空间，并且每个方法都有，是不是可以去掉？
+- [x] 样式问题，所有表格，标题，英语的习惯是每个词的首字母都大写，Method detail=> Method Detail. title=>Title. 
+- [x] 这个不确定，Method detail感觉比较占空间，并且每个方法都有，是不是可以去掉？
 
 
 

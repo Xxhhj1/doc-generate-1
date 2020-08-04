@@ -6,6 +6,7 @@ from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
 from project.extractor_module.constant.constant import RelationNameConstant, FeatureConstant, DomainConstant, \
     FunctionalityConstant, SentenceConstant, CodeConstant
 from project.utils.path_util import PathUtil
+import re
 
 
 class KnowledgeService:
@@ -61,8 +62,17 @@ class KnowledgeService:
         res = dict()
         doc: MultiFieldDocument = self.doc_collection.get_by_id(method_id)
         full_description = doc.get_doc_text_by_field('full_description')
-        res["full_description"] = full_description
-        res["comment"] = doc.get_doc_text_by_field('dp_comment')
+        # res["full_description"] = full_description
+        # res["comment"] = doc.get_doc_text_by_field('dp_comment')
+        dp_comment = doc.get_doc_text_by_field('dp_comment')
+        # 正则处理去掉多余字符
+        dp_comment = re.sub(r"</?(.+?)>", "", dp_comment)
+        if full_description != "" or full_description is not None:
+            res['comment'] = full_description
+        elif dp_comment != "" or dp_comment is not None:
+            res['comment'] = 'DL Auto Generate:' + dp_comment
+        else:
+            res['comment'] = ''
         return res
 
     def method_parameter(self, method_id):
