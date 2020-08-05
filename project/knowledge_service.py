@@ -46,6 +46,7 @@ class KnowledgeService:
             m["parameters"] = self.method_parameter(m["id"])
             m["return_value"] = self.method_return_value(m["id"])
             m["doc_info"] = self.get_method_doc_info(m["id"])
+        method_list.sort(key=lambda x: x['declare'])
         return method_list
 
     def get_desc_from_api_id(self, api_id):
@@ -61,7 +62,7 @@ class KnowledgeService:
     def get_method_doc_info(self, method_id):
         res = dict()
         doc: MultiFieldDocument = self.doc_collection.get_by_id(method_id)
-        print(doc)
+        # print(doc)
         full_description = doc.get_doc_text_by_field('full_description')
         # res["full_description"] = full_description
         # res["comment"] = doc.get_doc_text_by_field('dp_comment')
@@ -266,7 +267,7 @@ class KnowledgeService:
 
 if __name__ == '__main__':
     pro_name = "jabref"
-    data_dir = PathUtil.doc(pro_name=pro_name, version="v1.1")
+    data_dir = PathUtil.doc(pro_name=pro_name, version="v1.2")
     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 
     knowledge_service = KnowledgeService(doc_collection)
@@ -294,3 +295,6 @@ if __name__ == '__main__':
     api_id = knowledge_service.get_api_id_by_name("org.jabref.gui.cleanup.CleanupAction")
     t = knowledge_service.api_field(api_id)
     print(t)
+
+    # for i in knowledge_service.get_api_methods(1207):
+    #     print(i['declare'])

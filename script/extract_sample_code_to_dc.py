@@ -49,7 +49,7 @@ if __name__ == '__main__':
             print('check mid: ' + str(mid_list[index]))
             method_info: str = methods_info[mid_list[index]-1]
             index += 1
-            if method_info.find('{') is not -1 and method_info not in sample_code_list:
+            if method_info.find('{') != -1 and method_info.count(';') > 1:
                 sample_code_list.append(method_info)
                 count += 1
 
