@@ -83,11 +83,11 @@
 
 - [ ] [类的可视化图展示](http://bigcode.fudan.edu.cn/kg/index.html#/ElementGraph/890) (徐焕珺)
 
-- [ ] 相关概念 (刘阳)
+- [x] 相关概念 (刘阳)
   - 相关概念抽取
   - 最相关概念排序展示
   
-- [] 相关Wikidata概念。利用API比较的链接技术，对于API的相关概念，尝试链接到Wikidata，然后展示能链接上的wikidata概念（设置有超链接点击到wikidata概念页面和维基百科页面）
+- [ ] 相关Wikidata概念。利用API比较的链接技术，对于API的相关概念，尝试链接到Wikidata，然后展示能链接上的wikidata概念（设置有超链接点击到wikidata概念页面和维基百科页面）
 
 ### v1.2
 
