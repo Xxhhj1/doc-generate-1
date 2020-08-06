@@ -264,6 +264,22 @@ class KnowledgeService:
         methods_list.sort(key=lambda x: x[1], reverse=True)
         return methods_list[:5]
 
+    # 返回该类的构造方法信息
+    def get_constructor(self, api_name):
+        api_id: int = self.get_api_id_by_name(name=api_name)
+        res = dict()
+        all_methods = self.get_api_methods(api_id=api_id)
+        count = 0
+        for method in all_methods:
+            if method['declare'][0] < 'a':
+                count += 1
+            else:
+                break
+        constructor_list = all_methods[:count]
+        res['number_of_constructor'] = count
+        res['constructor_detail'] = constructor_list
+        return res
+
 
 if __name__ == '__main__':
     pro_name = "jabref"
@@ -296,5 +312,5 @@ if __name__ == '__main__':
     t = knowledge_service.api_field(api_id)
     print(t)
 
-    # for i in knowledge_service.get_api_methods(1207):
-    #     print(i['declare'])
+    for i in knowledge_service.get_constructor("org.jabref.model.entry.BibEntry")['constructor_detail']:
+        print(i['declare'])

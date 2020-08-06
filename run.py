@@ -107,5 +107,15 @@ def parameter_return_value():
     return jsonify(result)
 
 
+# return the constructor of the class
+@app.route('/constructor/', methods=['POST', 'GET'])
+def get_constructor():
+    if 'qualified_name' not in request.json:
+        return 'qualified name need'
+    qualified_name = request.json['qualified_name']
+    res = knowledge_service.get_constructor(qualified_name)
+    return jsonify(res)
+
+
 if __name__ == '__main__':
     app.run()
