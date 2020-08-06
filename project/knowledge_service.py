@@ -274,14 +274,32 @@ class KnowledgeService:
     def get_constructor(self, api_name):
         api_id: int = self.get_api_id_by_name(name=api_name)
         res = dict()
-        all_methods = self.get_api_methods(api_id=api_id)
+        # all_methods = self.get_api_methods(api_id=api_id)
+        # count = 0
+        # for method in all_methods:
+        #     if method['declare'][0] < 'a':
+        #         count += 1
+        #     else:
+        #         break
+        # constructor_list = all_methods[:count]
+        res_list = []
+        res_list.extend(self.api_by_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
+            CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
+        method_list = self.parse_res_list(res_list)
+        for m in method_list:
+            m["declare"] = self.get_declare_from_method_name(m["name"])
+            m["parameters"] = self.method_parameter(m["id"])
+            m["return_value"] = self.method_return_value(m["id"])
+            m["doc_info"] = self.get_method_doc_info(m["id"])
+        method_list.sort(key=lambda x: x['declare'])
+        # 选取构造方法
         count = 0
-        for method in all_methods:
-            if method['declare'][0] < 'a':
+        for m in method_list:
+            if m['declare'][0] < 'a':
                 count += 1
             else:
-                break
-        constructor_list = all_methods[:count]
+                break;
+        constructor_list = method_list[:count]
         res['number_of_constructor'] = count
         res['constructor_detail'] = constructor_list
         return res
