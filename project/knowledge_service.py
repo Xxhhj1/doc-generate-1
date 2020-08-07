@@ -12,7 +12,7 @@ import re
 class KnowledgeService:
     def __init__(self, doc_collection):
         graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.8")
-        self.graph_data = GraphData.load(graph_data_path)
+        self.graph_data: GraphData = GraphData.load(graph_data_path)
         self.doc_collection = doc_collection
 
     def get_api_characteristic(self, api_id):
@@ -46,6 +46,7 @@ class KnowledgeService:
             m["parameters"] = self.method_parameter(m["id"])
             m["return_value"] = self.method_return_value(m["id"])
             m["doc_info"] = self.get_method_doc_info(m["id"])
+            m["exception_info"] = self.get_exception_info(m["id"])
         method_list.sort(key=lambda x: x['declare'])
         # 排除构造方法
         count = 0
@@ -274,14 +275,6 @@ class KnowledgeService:
     def get_constructor(self, api_name):
         api_id: int = self.get_api_id_by_name(name=api_name)
         res = dict()
-        # all_methods = self.get_api_methods(api_id=api_id)
-        # count = 0
-        # for method in all_methods:
-        #     if method['declare'][0] < 'a':
-        #         count += 1
-        #     else:
-        #         break
-        # constructor_list = all_methods[:count]
         res_list = []
         res_list.extend(self.api_by_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
             CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
@@ -304,6 +297,19 @@ class KnowledgeService:
         res['constructor_detail'] = constructor_list
         return res
 
+    # 返回该方法的exception信息
+    def get_exception_info(self, api_id):
+        exception_info = list()
+        res_list: list = self.api_relation_search(api_id, "has exception condition")
+        for res in res_list:
+            info = dict()
+            full_name: str = res[1]['properties']['qualified_name']
+            exception_name = full_name[full_name.rfind(")")+2:]
+            info['exception_name'] = exception_name
+            info['description'] = res[1]['properties']['short_description']
+            exception_info.append(info)
+        return exception_info
+
 
 if __name__ == '__main__':
     pro_name = "jabref"
@@ -312,29 +318,30 @@ if __name__ == '__main__':
 
     knowledge_service = KnowledgeService(doc_collection)
     # knowledge_service.get_api_terminologies("org.jabref.logic.importer.fileformat.EndnoteImporter.A_PATTERN")
-    t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
-    print(t)
+    # t = knowledge_service.api_base_structure("org.jabref.benchmarks.Benchmarks")
+    # print(t)
     # t = knowledge_service.api_base_structure("org.jabref.gui.entryeditor.FieldsEditorTab")
     # print(t)
 
-    t = knowledge_service.get_knowledge("org.jabref.gui.actions.OldDatabaseCommandWrapper")
-    t = knowledge_service.get_knowledge("org.jabref.model.metadata.ContentSelectors")
-    print(t)
-
-    api_id = knowledge_service.get_api_id_by_name("org.jabref.model.metadata.event.MetaDataChangedEvent")
-    t = knowledge_service.get_api_methods(api_id)
-    print(t)
-    api_id = knowledge_service.get_api_id_by_name(
-        "org.jabref.gui.documentviewer.PageDimension.FixedHeightPageDimension")
-
-    t = knowledge_service.api_father_class(api_id)
-    print(t)
-    api_id = knowledge_service.get_api_id_by_name("org.jabref.logic.bst.VM.MacroFunction")
-    t = knowledge_service.api_implement_class(api_id)
-    print(t)
-    api_id = knowledge_service.get_api_id_by_name("org.jabref.gui.cleanup.CleanupAction")
-    t = knowledge_service.api_field(api_id)
-    print(t)
-
-    for i in knowledge_service.get_constructor("org.jabref.model.entry.BibEntry")['constructor_detail']:
-        print(i['declare'])
+    # t = knowledge_service.get_knowledge("org.jabref.gui.actions.OldDatabaseCommandWrapper")
+    # t = knowledge_service.get_knowledge("org.jabref.model.metadata.ContentSelectors")
+    # print(t)
+    #
+    # api_id = knowledge_service.get_api_id_by_name("org.jabref.model.metadata.event.MetaDataChangedEvent")
+    # t = knowledge_service.get_api_methods(api_id)
+    # print(t)
+    # api_id = knowledge_service.get_api_id_by_name(
+    #     "org.jabref.gui.documentviewer.PageDimension.FixedHeightPageDimension")
+    #
+    # t = knowledge_service.api_father_class(api_id)
+    # print(t)
+    # api_id = knowledge_service.get_api_id_by_name("org.jabref.logic.bst.VM.MacroFunction")
+    # t = knowledge_service.api_implement_class(api_id)
+    # print(t)
+    # api_id = knowledge_service.get_api_id_by_name("org.jabref.gui.cleanup.CleanupAction")
+    # t = knowledge_service.api_field(api_id)
+    # print(t)
+    #
+    # for i in knowledge_service.get_constructor("org.jabref.model.entry.BibEntry")['constructor_detail']:
+    #     print(i['declare'])
+    print(knowledge_service.get_exception_info("org.jabref.cli.CrossrefFetcherEvaluator.main(java.lang.String[])"))
