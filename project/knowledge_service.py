@@ -48,6 +48,8 @@ class KnowledgeService:
             m["doc_info"] = self.get_method_doc_info(m["id"])
             m["exception_info"] = self.get_exception_info(m["id"])
             m["label"] = self.get_label_info(m["id"], "method")
+            m["sample_code"] = self.get_one_sample_code(m["id"])
+
         method_list.sort(key=lambda x: x['declare'])
         # 排除构造方法
         count = 0
@@ -264,14 +266,20 @@ class KnowledgeService:
     def get_key_methods(self, api_name):
         methods = self.api_contains_method(api_name)
         methods_list = []
+        res = []
         for i in range(len(methods)):
             method_name = methods[i]["name"]
-            method_value = \
-                self.graph_data.find_nodes_by_ids(self.get_api_id_by_name(method_name))[0]["properties"]["pr_value"]
-            methods_list.append((method_name, method_value))
-
+            methods_list.append(method_name)
         methods_list.sort(key=lambda x: x[1], reverse=True)
-        return methods_list[:5]
+        methods_list = methods_list[:5]
+
+        for i in methods_list:
+            info = dict()
+            api_id = self.get_api_id_by_name(i)
+            info["qualified_name"] = i
+            info["sample_code"] = self.get_one_sample_code(api_id)
+            res.append(info)
+        return res
 
     # 返回该类的构造方法信息
     def get_constructor(self, api_name):
@@ -326,6 +334,14 @@ class KnowledgeService:
                 return i
         return "missing label"
 
+    # 返回方法对应的单个sample_code
+    def get_one_sample_code(self, api_id):
+        doc: MultiFieldDocument = self.doc_collection.get_by_id(api_id)
+        sample_code = doc.get_doc_text_by_field('sample_code')
+        if len(sample_code) == 0 or sample_code is None:
+            return ""
+        else:
+            return sample_code[0][2:]
 
 if __name__ == '__main__':
     pro_name = "jabref"
@@ -360,4 +376,4 @@ if __name__ == '__main__':
     #
     # for i in knowledge_service.get_constructor("org.jabref.model.entry.BibEntry")['constructor_detail']:
     #     print(i['declare'])
-    print(knowledge_service.get_label_info(1074))
+    print(knowledge_service.get_one_sample_code(1074))

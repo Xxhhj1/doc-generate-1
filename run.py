@@ -60,12 +60,8 @@ def key_methods():
     if "qualified_name" not in request.json:
         return "qualified_name need"
     qualified_name = request.json['qualified_name']
-    methods_list = knowledge_service.get_key_methods(qualified_name)
-    for i in range(len(methods_list)):
-        methods_list[i] = methods_list[i][0]
-    result = dict()
-    result["key_methods"] = methods_list
-    return jsonify(result)
+    res = knowledge_service.get_key_methods(qualified_name)
+    return jsonify(res)
 
 
 @app.route('/terminology/', methods=["POST", "GET"])
