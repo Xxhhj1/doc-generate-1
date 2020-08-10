@@ -33,10 +33,8 @@ class DocService:
             return None
         result = dict()
         sample_code = doc.get_doc_text_by_field('sample_code')
-        for i in range(len(sample_code)):
-            print(sample_code[i])
-            sample_code[i] = "<br/>".join(sample_code[i].split("\n"))
-            print(sample_code[i])
+        # for i in range(len(sample_code)):
+            # sample_code[i] = "<br/>".join(sample_code[i].split("\n"))
         if sample_code is "":
             return None
         else:
