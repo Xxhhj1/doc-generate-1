@@ -1,6 +1,6 @@
 from sekg.constant.code import CodeEntityRelationCategory
 from sekg.constant.constant import WikiDataConstance
-from sekg.graph.exporter.graph_data import GraphData
+from sekg.graph.exporter.graph_data import GraphData, NodeInfo
 from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
 
 from project.extractor_module.constant.constant import RelationNameConstant, FeatureConstant, DomainConstant, \
@@ -47,6 +47,7 @@ class KnowledgeService:
             m["return_value"] = self.method_return_value(m["id"])
             m["doc_info"] = self.get_method_doc_info(m["id"])
             m["exception_info"] = self.get_exception_info(m["id"])
+            m["label"] = self.get_label_info(m["id"], "method")
         method_list.sort(key=lambda x: x['declare'])
         # 排除构造方法
         count = 0
@@ -256,6 +257,7 @@ class KnowledgeService:
         res["extends"] = self.api_father_class(api_id)
         res["implements"] = self.api_implement_class(api_id)
         res["fields"] = self.api_field(api_id)
+        res["label"] = self.get_label_info(api_id, "class")
         return res
 
     # 返回类下面5个最关键方法
@@ -310,6 +312,20 @@ class KnowledgeService:
             exception_info.append(info)
         return exception_info
 
+    # 返回分类标签信息
+    def get_label_info(self, api_id, class_or_method):
+        node: NodeInfo = self.graph_data.find_nodes_by_ids(api_id)[0]
+        method_label_list = ["accessor method", "mutator method", "creational method", "constructor", "undefined method"]
+        class_label_list = ["entity class", "factory class", "util class", "pool class", "undefined class"]
+        if class_or_method == "class" :
+            label_list = class_label_list
+        else:
+            label_list = method_label_list
+        for i in label_list:
+            if i in node["labels"]:
+                return i
+        return "missing label"
+
 
 if __name__ == '__main__':
     pro_name = "jabref"
@@ -344,4 +360,4 @@ if __name__ == '__main__':
     #
     # for i in knowledge_service.get_constructor("org.jabref.model.entry.BibEntry")['constructor_detail']:
     #     print(i['declare'])
-    print(knowledge_service.get_exception_info("org.jabref.cli.CrossrefFetcherEvaluator.main(java.lang.String[])"))
+    print(knowledge_service.get_label_info(1074))
