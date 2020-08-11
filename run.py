@@ -114,6 +114,7 @@ def parameter_return_value():
     for i in as_return_value_list:
         node: NodeInfo = graph_data.find_one_node_by_property_value_starts_with(property_name="qualified_name",
                                                                                 property_value_starter=i[:i.rfind("(")])
+        info = dict()
         info['qualified_name'] = i
         if node is None:
             info['sample_code'] = ""
