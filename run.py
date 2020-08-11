@@ -105,7 +105,6 @@ def parameter_return_value():
                                                                                 property_value_starter=i[:i.rfind("(")])
         info['qualified_name'] = i
         if node is None:
-            print(i[:i.rfind("(")])
             info['sample_code'] = ""
         else:
             info['sample_code'] = knowledge_service.get_one_sample_code(node['id'])
@@ -117,7 +116,6 @@ def parameter_return_value():
                                                                                 property_value_starter=i[:i.rfind("(")])
         info['qualified_name'] = i
         if node is None:
-            print(i[:i.rfind("(")])
             info['sample_code'] = ""
         else:
             info['sample_code'] = knowledge_service.get_one_sample_code(node['id'])
