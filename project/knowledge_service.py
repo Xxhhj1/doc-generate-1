@@ -337,6 +337,8 @@ class KnowledgeService:
     # 返回方法对应的单个sample_code
     def get_one_sample_code(self, api_id):
         doc: MultiFieldDocument = self.doc_collection.get_by_id(api_id)
+        if doc is None:
+            return ""
         sample_code = doc.get_doc_text_by_field('sample_code')
         if len(sample_code) == 0 or sample_code is None:
             return ""

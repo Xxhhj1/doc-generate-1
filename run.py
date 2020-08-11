@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
-from sekg.graph.exporter.graph_data import GraphData
+from sekg.graph.exporter.graph_data import GraphData, NodeInfo
 
 from project.knowledge_service import KnowledgeService
 from project.doc_service import DocService
@@ -97,9 +97,34 @@ def parameter_return_value():
     qualified_name = request.json['qualified_name']
     as_parameter_list = json_service.api_as_parameter(qualified_name)
     as_return_value_list = json_service.api_as_return_value(qualified_name)
+
+    parameter_result = list()
+    for i in as_parameter_list:
+        info = dict()
+        node: NodeInfo = graph_data.find_one_node_by_property_value_starts_with(property_name="qualified_name",
+                                                                                property_value_starter=i[:i.rfind("(")])
+        info['qualified_name'] = i
+        if node is None:
+            print(i[:i.rfind("(")])
+            info['sample_code'] = ""
+        else:
+            info['sample_code'] = knowledge_service.get_one_sample_code(node['id'])
+        parameter_result.append(info)
+
+    return_value_result = list()
+    for i in as_return_value_list:
+        node: NodeInfo = graph_data.find_one_node_by_property_value_starts_with(property_name="qualified_name",
+                                                                                property_value_starter=i[:i.rfind("(")])
+        info['qualified_name'] = i
+        if node is None:
+            print(i[:i.rfind("(")])
+            info['sample_code'] = ""
+        else:
+            info['sample_code'] = knowledge_service.get_one_sample_code(node['id'])
+        return_value_result.append(info)
     result = dict()
-    result['paramater'] = as_parameter_list
-    result['return_value'] = as_return_value_list
+    result['parameter'] = parameter_result
+    result['return_value'] = return_value_result
     return jsonify(result)
 
 
