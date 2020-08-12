@@ -105,7 +105,7 @@ def parameter_return_value():
                                                                                 property_value_starter=i[:i.rfind("(")])
         info['qualified_name'] = i
         if node is None:
-            info['sample_code'] = ""
+            info['sample_code'] = "No sample code available."
         else:
             info['sample_code'] = knowledge_service.get_one_sample_code(node['id'])
         parameter_result.append(info)
@@ -117,7 +117,7 @@ def parameter_return_value():
         info = dict()
         info['qualified_name'] = i
         if node is None:
-            info['sample_code'] = ""
+            info['sample_code'] = "No sample code available."
         else:
             info['sample_code'] = knowledge_service.get_one_sample_code(node['id'])
         return_value_result.append(info)
