@@ -1,4 +1,5 @@
 # Document Generator
+[![DOI](https://zenodo.org/badge/275757098.svg)](https://zenodo.org/badge/latestdoi/275757098)
 
 This is a document generator backend which built by Flask. The goal is to build an automated system that can create on-demand developer documentation for a Java class.
 
