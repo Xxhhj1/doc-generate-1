@@ -1,132 +1,40 @@
-# KGPythonProjectTemplate
-这个是知识图谱组建立Python项目的模板
+# Document Generator
 
-```
-project_root            整个代码项目的根目录
-│   README.md           对于整个项目的介绍
-│   .gitignore          对于某些文件和目录让Git忽略管理
-│   requirements.txt    声明整个项目依赖的Python库
-│   definitions.py      对于整个项目级别的一些常量进行定义，方便其他地方引用。默认有一个ROOT_DIR的常量是项目根目录。
-│                       在代码中千万不要使用绝对路径，要使用基于ROOT_DIR的相对路径。
-└───data                存放项目依赖的数据的目录
-│
-└───doc                 存放项目相关的文档
-│
-└───output              存放项目的输出，里面内容一般不进行Git托管，都是保留在本地的
-│
-└───script              这是目录底下存放一些执行脚本，一般是非常特定的。要和可复用的项目代码区别开来。
-│
-└───project             这是整个项目的核心代码的目录，一般就用项目名。
-│   │                   如我们的开源库sekg，这个目录就会由重命名为sekg，里面是各个模块。
-│   │   __init__.py
-│   └───module1         独立的功能模块，里面是可复用的代码
-│   │   │   func1.py    某个具体的功能
-│   │   │   func2.py    某个具体的功能
-│   │   │   ...
-│   └───module2         独立的功能模块，里面是可复用的代码
-│       │   func3.py    某个具体的功能
-│       │   func4.py    某个具体的功能
-│       │   ...
-│
-└───test                测试包，里面是与核心模块一一对应的测试文件，目录结构保持一致
-│   │   __init__.py
-│   └───module1
-│   │   │   test_func1.py    某个具体的功能的测试
-│   │   │   test_func2.py    某个具体的功能的测试
-│   │   │   ...
-│   └───module2
-│       │   test_func3.py    某个具体的功能的测试
-│       │   test_func4.py    某个具体的功能的测试
-│       │   ...
-```
-
-# 项目的README.md的模板
-来源[Github](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-
-# Project Title
-
-One Paragraph of project description goes here
+This is a document generator backend which built by Flask. The goal is to build an automated system that can create on-demand developer documentation for a Java class.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
 ```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
+python==3.6.8
+nltk==3.4.5
+sekg==0.10.3.18
+Flask==1.1.2
+gunicorn==20.0.4
+flask_cors==3.0.8
 ```
 
-And repeat
+## Running the Service
+
+You can simply typing the following command to start the service on server or localhost
 
 ```
-until finished
+gunicorn -b localhost:5000 run:app
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* Mingwei Liu
+* Yang Liu
+* Shuangshuang Xing
+* Gang Lv
+* Jiazhan Xie
+* Huanjun Xu
+* Xiujie Meng
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+This project is licensed under the MIT License.
