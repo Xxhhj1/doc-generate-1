@@ -22,11 +22,28 @@ class KnowledgeService:
         return self.parse_res_list(res_list)
 
     def get_api_functionality(self, api_id):
-        res_list = []
-        res_list.extend(self.api_relation_search(api_id, RelationNameConstant.has_Functionality_Relation))
-        res_list.extend(self.api_relation_search(api_id, RelationNameConstant.Functionality_Compare_Relation))
-        res_list.extend(self.api_relation_search(api_id, RelationNameConstant.has_Behavior_Relation))
-        return self.parse_res_list(res_list)
+        # res_list = []
+        # res_list.extend(self.api_relation_search(api_id, RelationNameConstant.has_Functionality_Relation))
+        # res_list.extend(self.api_relation_search(api_id, RelationNameConstant.Functionality_Compare_Relation))
+        # res_list.extend(self.api_relation_search(api_id, RelationNameConstant.has_Behavior_Relation))
+        # return self.parse_res_list(res_list)
+        description = self.get_method_doc_info(api_id)["comment"]
+        if description == "":
+            return description
+        elif description.startswith("DL Auto Generate:"):
+            return description[description.find(":")+1:]
+        elif description.find(".") != -1:
+            return description[:description.find(".")]
+        else:
+            return description
+        # elif description.find(".") != -1 and description.find(",") != -1:
+        #     index = min(description.find("."), description.find(","))
+        #     return description[:index]
+        # elif description.find(".") != -1:
+        #     return description[:description.find(".")]
+        # else:
+        #     return description[:description.find(",")]
+
 
     def get_api_category(self, api_id):
         res_list = []
@@ -49,6 +66,8 @@ class KnowledgeService:
             m["exception_info"] = self.get_exception_info(m["id"])
             m["label"] = self.get_label_info(m["id"], "method")
             m["sample_code"] = self.get_one_sample_code(m["id"])
+            m["functionality"] = self.get_api_functionality(m["id"])
+            m["directive"] = ""
 
         method_list.sort(key=lambda x: x['declare'])
         # 排除构造方法
@@ -75,8 +94,6 @@ class KnowledgeService:
         res = dict()
         doc: MultiFieldDocument = self.doc_collection.get_by_id(method_id)
         full_description = doc.get_doc_text_by_field('full_description')
-        # res["full_description"] = full_description
-        # res["comment"] = doc.get_doc_text_by_field('dp_comment')
         dp_comment = doc.get_doc_text_by_field('dp_comment')
         # 正则处理去掉多余字符
         dp_comment = re.sub(r"</?(.+?)>", "", dp_comment)
@@ -262,6 +279,8 @@ class KnowledgeService:
         res["implements"] = self.api_implement_class(api_id)
         res["fields"] = self.api_field(api_id)
         res["label"] = self.get_label_info(api_id, "class")
+        res["functionality"] = self.get_api_functionality(api_id)
+        res["directive"] = ""
         # 假接口
         if api_id == 1207:
             # implements 信息添加
